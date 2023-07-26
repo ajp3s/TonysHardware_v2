@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
 
-from TonysHardware_v2.accounts.forms import BasicUserCreationForm, BasicUserEditForm
+from TonysHardware_v2.accounts.forms import BasicUserCreationForm, BasicUserEditForm, BasicUserDeleteForm
 
 BasicUserModel = get_user_model()
 
@@ -45,15 +45,26 @@ class UserLogoutView(LogoutView):
     success_url = reverse_lazy('home page')
 
 
+class UserEditProfileView(gen_views.UpdateView):
+    model = BasicUserModel
+    form_class = BasicUserEditForm
+    template_name = 'accounts/edit_profile.html'
+
+    def get_success_url(self):
+        pk = self.request.user.pk
+        return reverse_lazy('profile_details', kwargs={'pk': pk})
+
+
 class UserDeleteProfileView(gen_views.DeleteView):
     model = BasicUserModel
     template_name = 'accounts/delete_profile.html'
     success_url = reverse_lazy('home page')
+    form_class = BasicUserDeleteForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = self.get_object()
         context['message'] = 'Do you really want to delete your profile?\n This operation is irreversible.'
-        context['form'] = BasicUserEditForm(instance=obj, disabled=True)
+        context['form'] = BasicUserDeleteForm(instance=obj, disabled=True)
         return context
 

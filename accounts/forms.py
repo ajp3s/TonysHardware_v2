@@ -1,11 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
 
-from TonysHardware_v2.accounts.models import BasicUser
+BasicUserModel = get_user_model()
 
 
-class BasicUserBaseForm(UserCreationForm):
+class BasicUserCreationForm(UserCreationForm):
     class Meta:
-        model = BasicUser
+        model = BasicUserModel
         fields = [
             'username',
             'password1',
@@ -15,13 +17,39 @@ class BasicUserBaseForm(UserCreationForm):
         ]
 
 
-class BasicUserCreationForm(BasicUserBaseForm):
-    pass
+class BasicUserEditForm(forms.ModelForm):
+    class Meta:
+        model = BasicUserModel
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'profile_picture',
+            'additional_information',
+
+        ]
+
+        widgets = {
+            'username': forms.TextInput(
+                attrs={'readonly': 'readonly'}
+            )
+        }
 
 
-class BasicUserEditForm(BasicUserBaseForm):
-    pass
+class BasicUserDeleteForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        disabled = kwargs.pop('disabled', False)
+        super(BasicUserDeleteForm, self).__init__(*args, **kwargs)
 
+        if disabled:
+            for field in self.fields.values():
+                field.widget.attrs['disabled'] = 'disabled'
 
-class BasicUserDeleteForm(BasicUserBaseForm):
-    pass
+    class Meta:
+        model = BasicUserModel
+        fields = '__all__'
+        exclude = [
+            'password1',
+            'pasword2',
+            'profile_picture',
+        ]
