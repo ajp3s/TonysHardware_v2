@@ -41,6 +41,5 @@ class BasicUser(AbstractUser):
             storage = S3Boto3Storage()
             self.profile_picture.name = self.profile_picture.name
             self.profile_picture = storage.save(self.profile_picture.name, self.profile_picture)
-            self.profile_picture = f'{AWS_S3_CUSTOM_DOMAIN}/{self.profile_picture.name}'
 
         super().save(*args, **kwargs)

@@ -1,5 +1,5 @@
 import boto3
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -15,7 +15,14 @@ class UserCreationView(gen_views.CreateView):
     model = BasicUserModel
     form_class = BasicUserCreationForm
     template_name = 'accounts/register.html'
-    success_url = reverse_lazy('home page')
+    success_url = reverse_lazy('profile_details')
+
+    def form_valid(self, form):
+        result = super().form_valid(form)
+
+        login(self.request, self.object)
+
+        return result
 
 
 class UsersListView(gen_views.ListView):
