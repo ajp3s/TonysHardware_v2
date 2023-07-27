@@ -36,6 +36,10 @@ class BasicUser(AbstractUser):
 
     )
 
+    def full_name(self):
+        full_name = f'{self.first_name} {self.last_name}' if self.first_name or self.last_name else ""
+        return full_name
+
     def save(self, *args, **kwargs):
         if self.profile_picture:
             storage = S3Boto3Storage()
@@ -43,3 +47,6 @@ class BasicUser(AbstractUser):
             self.profile_picture = storage.save(self.profile_picture.name, self.profile_picture)
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.get_full_name()

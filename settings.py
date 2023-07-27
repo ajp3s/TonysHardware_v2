@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'TonysHardware_v2.accounts',
     'TonysHardware_v2.builds',
     'TonysHardware_v2.common',
-    'TonysHardware_v2.hardware_components',
+    'TonysHardware_v2.hardware',
 
     # storages:
     'storages',
