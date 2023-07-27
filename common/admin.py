@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from TonysHardware_v2.common.models import ContactFormModel
+
+
+@admin.register(ContactFormModel)
+class ContactFormModelAdmin(admin.ModelAdmin):
+    pass
+

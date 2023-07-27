@@ -6,6 +6,12 @@ BasicUserModel = get_user_model()
 
 
 class BasicUserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(BasicUserCreationForm, self).__init__(*args, **kwargs)
+
+        for field in ['username', 'password1', 'password2']:
+            self.fields[field].help_text = None
+
     class Meta:
         model = BasicUserModel
         fields = [

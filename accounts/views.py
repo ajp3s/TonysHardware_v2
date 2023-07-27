@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -10,7 +11,7 @@ from TonysHardware_v2.accounts.forms import BasicUserCreationForm, BasicUserEdit
 BasicUserModel = get_user_model()
 
 
-class ValidateUserMixin:
+class ValidateAccountOwnerMixin:
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user == self.get_object().user:
             return super().dispatch(request, *args, **kwargs)
@@ -32,7 +33,7 @@ class UserCreationView(gen_views.CreateView):
         return result
 
 
-class UserEditProfileView(gen_views.UpdateView):
+class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     model = BasicUserModel
     form_class = BasicUserEditForm
     template_name = 'accounts/edit_profile.html'
@@ -42,7 +43,7 @@ class UserEditProfileView(gen_views.UpdateView):
         return reverse_lazy('profile_details', kwargs={'pk': pk})
 
 
-class UserDeleteProfileView(gen_views.DeleteView):
+class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     model = BasicUserModel
     template_name = 'accounts/delete_profile.html'
     success_url = reverse_lazy('home page')
@@ -56,7 +57,7 @@ class UserDeleteProfileView(gen_views.DeleteView):
         return context
 
 
-class UserProfileDetailsView(gen_views.DetailView):
+class UserProfileDetailsView(gen_views.DetailView, LoginRequiredMixin):
     model = BasicUserModel
     template_name = 'accounts/profile_details.html'
     context_object_name = 'user'
@@ -79,4 +80,4 @@ class UserLogoutView(LogoutView):
 
 
 class AccessDeniedView(gen_views.TemplateView):
-    template_name = 'accounts'
+    template_name = 'accounts/access_denied.html'
