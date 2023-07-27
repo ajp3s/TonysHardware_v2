@@ -107,6 +107,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    ]
+
 LOGOUT_REDIRECT_URL = reverse_lazy('home page')
 AUTH_USER_MODEL = 'accounts.BasicUser'
 
