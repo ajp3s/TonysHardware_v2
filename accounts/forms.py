@@ -35,11 +35,8 @@ class BasicUserEditForm(forms.ModelForm):
 
         ]
 
-        widgets = {
-            'username': forms.TextInput(
-                attrs={'readonly': 'readonly'}
-            )
-        }
+        def save(self, commit=True):
+            save = self.model.save()
 
 
 class BasicUserDeleteForm(forms.ModelForm):

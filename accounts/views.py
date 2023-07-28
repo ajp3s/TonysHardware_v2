@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.files.storage import default_storage
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
@@ -51,6 +52,11 @@ class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAcco
         pk = self.request.user.pk
         return reverse_lazy('profile_details', kwargs={'pk': pk})
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.request.user
+        return kwargs
+
 
 class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     model = BasicUserModel
@@ -88,14 +94,11 @@ class UserLoginView(LoginView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['next'] = self.request.POST.get('next', '')
-        context['pk'] = self.request.user.pk
-
         return context
 
-
-    # def get_success_url(self):
-    #     pk = self.request.user.pk
-    #     return reverse_lazy('profile_details', kwargs={'pk': pk})
+    def get_success_url(self):
+        pk = self.request.user.pk
+        return self.request.POST.get('next', reverse_lazy('profile_details', kwargs={'pk': pk}))
 
 
 class UserLogoutView(LogoutView):
