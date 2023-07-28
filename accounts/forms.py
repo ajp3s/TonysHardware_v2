@@ -57,4 +57,6 @@ class BasicUserDeleteProfileForm(forms.ModelForm):
 class UploadImageForm(forms.ModelForm):
     class Meta:
         model = ImageGalleryModel
-        fields = '__all__'
+        fields = [
+            'image',
+        ]

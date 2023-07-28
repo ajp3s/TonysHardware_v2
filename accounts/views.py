@@ -9,6 +9,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
     UploadImageForm
+from TonysHardware_v2.accounts.models import ImageGalleryModel
 
 BasicUserModel = get_user_model()
 
@@ -113,9 +114,16 @@ class UserLogoutView(LogoutView):
 
 
 class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
-    template_name = 'accounts/upload_image.html'
+    model = ImageGalleryModel
     form_class = UploadImageForm
-    success_url = reverse_lazy('profile_details')
+    template_name = 'accounts/upload_image.html'
+
+    def get_success_url(self):
+        return reverse_lazy('profile_details', kwargs={'pk': self.request.user.pk})
+
+    def form_valid(self, form):
+        form.instance = self.request.user
+        return super().form_valid(form)
 
 
 class AccessDeniedView(gen_views.TemplateView):
