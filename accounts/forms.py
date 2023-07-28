@@ -53,9 +53,4 @@ class BasicUserDeleteForm(forms.ModelForm):
 
     class Meta:
         model = BasicUserModel
-        fields = '__all__'
-        exclude = [
-            'password1',
-            'pasword2',
-            'profile_picture',
-        ]
+        fields = ['username', 'first_name', 'last_name', 'email', 'date_joined']

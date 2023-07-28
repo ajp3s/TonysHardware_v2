@@ -27,10 +27,19 @@ class UserCreationView(gen_views.CreateView):
 
     def form_valid(self, form):
         result = super().form_valid(form)
-
         login(self.request, self.object)
 
         return result
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['next'] = self.request.POST.get('next', '')
+
+        return context
+
+    def get_success_url(self):
+        success_url = self.request.POST.get('next', self.success_url)
+        return success_url
 
 
 class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
@@ -45,9 +54,9 @@ class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAcco
 
 class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     model = BasicUserModel
+    form_class = BasicUserDeleteForm
     template_name = 'accounts/delete_profile.html'
     success_url = reverse_lazy('home page')
-    form_class = BasicUserDeleteForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,6 +64,12 @@ class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAc
         context['message'] = 'Do you really want to delete your profile?\n This operation is irreversible.'
         context['form'] = BasicUserDeleteForm(instance=obj, disabled=True)
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return redirect(success_url)
 
 
 class UserProfileDetailsView(gen_views.DetailView, LoginRequiredMixin):
@@ -70,9 +85,17 @@ class UserProfileDetailsView(gen_views.DetailView, LoginRequiredMixin):
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
 
-    def get_success_url(self):
-        pk = self.request.user.pk
-        return reverse_lazy('profile_details', kwargs={'pk': pk})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['next'] = self.request.POST.get('next', '')
+        context['pk'] = self.request.user.pk
+
+        return context
+
+
+    # def get_success_url(self):
+    #     pk = self.request.user.pk
+    #     return reverse_lazy('profile_details', kwargs={'pk': pk})
 
 
 class UserLogoutView(LogoutView):
