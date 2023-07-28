@@ -7,6 +7,8 @@ from django.urls import reverse_lazy
 from django.views import generic as gen_views
 from django.shortcuts import redirect
 from django.urls import reverse
+from storages.backends.s3boto3 import S3Boto3Storage
+
 from TonysHardware_v2.accounts.forms import BasicUserCreationForm, BasicUserEditForm, BasicUserDeleteForm
 
 BasicUserModel = get_user_model()
@@ -24,22 +26,27 @@ class UserCreationView(gen_views.CreateView):
     model = BasicUserModel
     form_class = BasicUserCreationForm
     template_name = 'accounts/register.html'
-    success_url = reverse_lazy('profile_details')
+    reverse_lazy('profile_details')
 
     def form_valid(self, form):
         result = super().form_valid(form)
+
         login(self.request, self.object)
 
         return result
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['next'] = self.request.POST.get('next', '')
+        next = self.request.POST.get('next', '')
+        context['pk'] = self.request.user.pk
+
+        if next != "?":
+            context['next'] = next
 
         return context
 
     def get_success_url(self):
-        success_url = self.request.POST.get('next', self.success_url)
+        success_url = self.request.POST.get('next', self.success_url(kwargs={'pk': self.request.user.pk}))
         return success_url
 
 
@@ -72,7 +79,10 @@ class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAc
         return context
 
     def post(self, request, *args, **kwargs):
+        storage = S3Boto3Storage()
         self.object = self.get_object()
+        if self.object.profile_picture:
+            storage.delete(self.object.profile_picture.name)
         success_url = self.get_success_url()
         self.object.delete()
         return redirect(success_url)

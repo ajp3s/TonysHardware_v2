@@ -44,11 +44,6 @@ class BasicUser(AbstractUser):
 
     )
 
-    def delete_picture_form_aws(self, picture):
-        storage = S3Boto3Storage()
-        if picture:
-            storage.delete(picture)
-
     def full_name(self):
         full_name = f'{self.first_name} {self.last_name}' if self.first_name or self.last_name else ""
         return full_name
@@ -63,7 +58,7 @@ class BasicUser(AbstractUser):
                 existing_instance = None
 
             if existing_instance and existing_instance.profile_picture != self.profile_picture:
-                self.delete_picture_form_aws(existing_instance.profile_picture.name)
+                storage.delete(existing_instance.profile_picture.name)
 
         if self.profile_picture:
             self.profile_picture.name = self.profile_picture.name
