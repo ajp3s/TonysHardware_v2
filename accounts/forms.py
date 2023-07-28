@@ -5,9 +5,9 @@ from django import forms
 BasicUserModel = get_user_model()
 
 
-class BasicUserCreationForm(UserCreationForm):
+class BasicUserRegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
-        super(BasicUserCreationForm, self).__init__(*args, **kwargs)
+        super(BasicUserRegisterForm, self).__init__(*args, **kwargs)
 
         for field in ['username', 'password1', 'password2']:
             self.fields[field].help_text = None
@@ -23,7 +23,7 @@ class BasicUserCreationForm(UserCreationForm):
         ]
 
 
-class BasicUserEditForm(forms.ModelForm):
+class BasicUserEditProfileForm(forms.ModelForm):
     class Meta:
         model = BasicUserModel
         fields = [
@@ -35,14 +35,11 @@ class BasicUserEditForm(forms.ModelForm):
 
         ]
 
-        def save(self, commit=True):
-            save = self.model.save()
 
-
-class BasicUserDeleteForm(forms.ModelForm):
+class BasicUserDeleteProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         disabled = kwargs.pop('disabled', False)
-        super(BasicUserDeleteForm, self).__init__(*args, **kwargs)
+        super(BasicUserDeleteProfileForm, self).__init__(*args, **kwargs)
 
         if disabled:
             for field in self.fields.values():

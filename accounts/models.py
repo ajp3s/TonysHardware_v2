@@ -34,11 +34,12 @@ class BasicUser(AbstractUser):
         max_length=300,
         null=True,
         blank=True,
+        default="",
 
     )
 
     profile_picture = models.FileField(
-        upload_to='profile_pictures/',
+        upload_to='media/profile_pictures/',
         null=True,
         blank=True,
 

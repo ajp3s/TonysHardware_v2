@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from storages.backends.s3boto3 import S3Boto3Storage
 
-from TonysHardware_v2.accounts.forms import BasicUserCreationForm, BasicUserEditForm, BasicUserDeleteForm
+from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm
 
 BasicUserModel = get_user_model()
 
@@ -24,35 +24,33 @@ class ValidateAccountOwnerMixin:
 
 class UserCreationView(gen_views.CreateView):
     model = BasicUserModel
-    form_class = BasicUserCreationForm
+    form_class = BasicUserRegisterForm
     template_name = 'accounts/register.html'
     reverse_lazy('profile_details')
 
     def form_valid(self, form):
-        result = super().form_valid(form)
-
+        submit = super().form_valid(form)
         login(self.request, self.object)
-
-        return result
+        return submit
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        next = self.request.POST.get('next', '')
-        context['pk'] = self.request.user.pk
-
-        if next != "?":
-            context['next'] = next
-
+        next_url = self.request.GET.get('next', '')
+        if next_url and '//' not in next_url:
+            context['next'] = next_url
         return context
 
     def get_success_url(self):
-        success_url = self.request.POST.get('next', self.success_url(kwargs={'pk': self.request.user.pk}))
-        return success_url
+        next_url = self.request.POST.get('next', '')
+        if next_url:
+            return next_url
+        else:
+            return reverse_lazy('profile_details', kwargs={'pk': self.object.pk})
 
 
 class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     model = BasicUserModel
-    form_class = BasicUserEditForm
+    form_class = BasicUserEditProfileForm
     template_name = 'accounts/edit_profile.html'
 
     def get_success_url(self):
@@ -67,7 +65,7 @@ class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAcco
 
 class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     model = BasicUserModel
-    form_class = BasicUserDeleteForm
+    form_class = BasicUserDeleteProfileForm
     template_name = 'accounts/delete_profile.html'
     success_url = reverse_lazy('home page')
 
@@ -75,7 +73,7 @@ class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAc
         context = super().get_context_data(**kwargs)
         obj = self.get_object()
         context['message'] = 'Do you really want to delete your profile?\n This operation is irreversible.'
-        context['form'] = BasicUserDeleteForm(instance=obj, disabled=True)
+        context['form'] = BasicUserDeleteProfileForm(instance=obj, disabled=True)
         return context
 
     def post(self, request, *args, **kwargs):
