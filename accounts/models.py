@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -71,25 +72,25 @@ class BasicUser(AbstractUser):
         return self.get_full_name()
 
 
+def validate_gallery_size(value):
+    user = value.user_profile
+    if ImageGalleryModel.objects.filter(user_profile=user).count() >= 5:
+        raise ValidationError("You can upload a maximum of 5 images.")
+
+
 class ImageGalleryModel(models.Model):
-    user_profile = models.ForeignKey(BasicUser, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='gallery_images/')
-    created_at = models.DateTimeField(auto_now_add=True)
+    user_profile = models.ForeignKey(
+        BasicUser,
+        on_delete=models.CASCADE,
+    )
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=[
-                    'user_profile',
-                ],
+    image = models.ImageField(
+        upload_to='gallery_images/',
 
-                condition=models.Q(
-                    image__isnull=False,
-                ),
-
-                name='user_gallery_limit'
-            )
-        ]
+        validators=(
+            validate_gallery_size,
+        ),
+    )
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
@@ -99,4 +100,3 @@ class ImageGalleryModel(models.Model):
             self.image = storage.save(self.image.name, self.image)
 
             super().save(*args, **kwargs)
-            

@@ -7,7 +7,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from storages.backends.s3boto3 import S3Boto3Storage
 
-from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm
+from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
+    UploadImageForm
 
 BasicUserModel = get_user_model()
 
@@ -111,8 +112,11 @@ class UserLogoutView(LogoutView):
     success_url = reverse_lazy('home page')
 
 
-class UploadImageView(gen_views.CreateView):
+class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     template_name = 'accounts/upload_image.html'
+    form_class = UploadImageForm
+    success_url = reverse_lazy('profile_details')
+
 
 class AccessDeniedView(gen_views.TemplateView):
     template_name = 'accounts/access_denied.html'
