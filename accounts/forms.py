@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
+from django.forms import models
+
+from TonysHardware_v2.accounts.models import ImageGalleryModel
 
 BasicUserModel = get_user_model()
 
@@ -24,6 +27,7 @@ class BasicUserRegisterForm(UserCreationForm):
 
 
 class BasicUserEditProfileForm(forms.ModelForm):
+
     class Meta:
         model = BasicUserModel
         fields = [
@@ -48,3 +52,9 @@ class BasicUserDeleteProfileForm(forms.ModelForm):
     class Meta:
         model = BasicUserModel
         fields = ['username', 'first_name', 'last_name', 'email', 'date_joined']
+
+
+class UploadImageForm(forms.ModelForm):
+    class Meta:
+        model = ImageGalleryModel
+        fields = '__all__'

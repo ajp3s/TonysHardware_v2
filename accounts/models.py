@@ -71,6 +71,32 @@ class BasicUser(AbstractUser):
         return self.get_full_name()
 
 
-class GalleryImage(models.Model):
+class ImageGalleryModel(models.Model):
     user_profile = models.ForeignKey(BasicUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='gallery_images/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'user_profile',
+                ],
+
+                condition=models.Q(
+                    image__isnull=False,
+                ),
+
+                name='user_gallery_limit'
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        storage = S3Boto3Storage()
+
+        if self.image:
+            self.image.name = self.image.name
+            self.image = storage.save(self.image.name, self.image)
+
+            super().save(*args, **kwargs)
+            

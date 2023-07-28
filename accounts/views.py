@@ -1,8 +1,6 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.core.files.storage import default_storage
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
 from django.shortcuts import redirect
@@ -112,6 +110,9 @@ class UserLoginView(LoginView):
 class UserLogoutView(LogoutView):
     success_url = reverse_lazy('home page')
 
+
+class UploadImageView(gen_views.CreateView):
+    template_name = 'accounts/upload_image.html'
 
 class AccessDeniedView(gen_views.TemplateView):
     template_name = 'accounts/access_denied.html'
