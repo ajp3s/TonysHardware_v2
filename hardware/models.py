@@ -143,3 +143,147 @@ class Cpu(models.Model):
         if self.cpu_image:
             self.cpu_image.name = self.cpu_image.name
             self.cpu_image = storage.save(self.cpu_image.name, self.cpu_image)
+
+
+class StorageDrive(models.Model):
+    manufacturer_choices = (
+        ('Adata', 'Adata'),
+        ('Corsair', 'Corsair'),
+        ('Crucial', 'Crucial'),
+        ('Gigabyte Aorus', 'Gigabyte Aorus'),
+        ('HP', 'HP'),
+        ('Intel', 'Intel'),
+        ('Kingston', 'Kingston'),
+        ('Micron', 'Micron'),
+        ('Pioneer', 'Pioneer'),
+        ('PNY', 'PNY'),
+        ('Samsung', 'Samsung'),
+        ('SanDisk', 'SanDisk'),
+        ('Seagate', 'Seagate'),
+        ('Western Digital', 'Western Digital'),
+        ('Axle', 'Axle'),
+        ('BIOSTAR', 'BIOSTAR'),
+        ('G.SKILL', 'G.SKILL'),
+        ('Plextor', 'Plextor'),
+        ('Verbatim', 'Verbatim'),
+        ('Viking', 'Viking'),
+    )
+
+    types_choices = (
+        ('nvme m.2 SSD', 'nvme m.2 SSD'),
+        ('HDD', 'HDD'),
+        ('2.5 sata SSD', '2.5 sata SSD'),
+    )
+
+    manufacturer = models.CharField(
+        max_length=50,
+        choices=manufacturer_choices,
+    )
+
+    type = models.CharField(
+        max_length=50,
+        choices=types_choices,
+    )
+
+    capacity = models.CharField(
+        max_length=50,
+    )
+
+    drive_image = models.ImageField(
+        upload_to='storage_drivers_images/'
+    )
+
+    def save(self, *args, **kwargs):
+        storage = S3Boto3Storage()
+
+        if self.drive_image:
+            self.drive_image.name = self.drive_image.name
+            self.drive_image = storage.save(self.drive_image.name, self.drive_image)
+
+
+class Psu(models.Model):
+    manufacturer_choices = (
+        ('ABS', 'ABS'),
+        ('Antec', 'Antec'),
+        ('AOpen', 'AOpen'),
+        ('Apevia', 'Apevia'),
+        ('AXLE', 'AXLE'),
+        ('Be quiet!', 'Be quiet!'),
+        ('Black Box', 'Black Box'),
+        ('Cooler Master', 'Cooler Master'),
+        ('Coolmax','Coolmax'),
+        ('Corsair','Corsair'),
+        ('Curtiss-Wright','Curtiss-Wright'),
+        ('Deepcool','Deepcool'),
+        ('Delta Electronics', 'Delta Electronics'),
+        ('Dynapower USA', 'Dynapower USA'),
+        ('Eaton', 'Eaton'),
+        ('Emerson Network Power', 'Emerson Network Power'),
+        ('EVGA', 'EVGA'),
+        ("Foxconn", 'Foxconn'),
+        ("G.SKILL", 'G.SKILL'),
+        ("LIAN LI", 'LIANLI'),
+        ('NZXT', 'NZXT'),
+        ('Phanteks', 'Phanteks'),
+        ('Qualstar', 'Qualstar'),
+        ('RIOTORO', 'RIOTORO'),
+        ('Rosewill', 'Rosewill'),
+        ('Seasonic', 'Seasonic'),
+        ('SIIG', 'SIIG'),
+        ('Shuttle', 'Shuttle'),
+        ('Supermicro', 'Supermicro'),
+        ('TDK', 'TDK'),
+        ('Thermaltake', 'Thermaltake'),
+        ('UMEC', 'UMEC'),
+        ('Vertiv', 'Vertiv'),
+        ('XFX', 'XFX'),
+    )
+
+    efficiency_standard_choices = (
+        ('80 Plus', '80 Plus'),
+        ('Bronze', 'Bronze'),
+        ('Silver', 'Silver'),
+        ('Gold', 'Gold'),
+        ('Platinum', 'Platinum'),
+        ('Titanium', 'Titanium'),
+    )
+
+    modular_choices = (
+        ('Fully modular', 'Fully modular'),
+        ('Semi-modular', 'Semi-modular'),
+        ('Non-modular', 'Non-modular'),
+    )
+
+    manufacturer = models.CharField(
+        max_length=50,
+        choices=manufacturer_choices,
+        null=True,
+
+    )
+
+    max_dc_output = models.PositiveIntegerField()
+
+    efficiency_standard = efficiency_standard_choices
+
+    modular = models.CharField(
+        max_length=50,
+        choices=modular_choices,
+        null=True,
+    )
+
+    connectors = models.TextField(
+        max_length=200,
+        null=True,
+    )
+
+    psu_image = models.ImageField(
+        upload_to='psu_images/'
+    )
+
+    def save(self, *args, **kwargs):
+        storage = S3Boto3Storage()
+        if self.psu_image:
+            self.psu_image = self.psu_image.name
+            self.psu_image = storage.save(self.psu_image.name, self.psu_image)
+
+
