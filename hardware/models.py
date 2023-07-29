@@ -87,7 +87,9 @@ class RAMMemory(models.Model):
         max_length=100,
     )
 
-    ram_image = models.ImageField()
+    ram_image = models.ImageField(
+        upload_to='ram_images/'
+    )
 
     def get_ram_type_and_frequency(self):
         return self.RAM_FREQUENCIES.get(self.ram_type, ())
@@ -96,4 +98,48 @@ class RAMMemory(models.Model):
         storage = S3Boto3Storage()
         if self.ram_image:
             self.ram_image.name = self.ram_image.name
-            self.profile_picture = storage.save(self.ram_image.name, self.ram_image)
+            self.ram_image = storage.save(self.ram_image.name, self.ram_image)
+
+
+class Cpu(models.Model):
+    CPU_MANUFACTURERS_CHOICES = (
+        ('Intel', "Intel"),
+        ("AMD", "AMD"),
+    )
+
+    manufacturer = models.CharField(
+        max_length=50,
+        choices=CPU_MANUFACTURERS_CHOICES
+    )
+
+    model = models.CharField(
+        max_length=50,
+    )
+
+    cores_count = models.CharField(
+        max_length=150,
+    )
+
+    base_clock = models.PositiveIntegerField()
+
+    boost_clock = models.PositiveIntegerField()
+
+    L1_cache = models.PositiveIntegerField()
+
+    L2_cache = models.PositiveIntegerField()
+
+    L3_cache = models.PositiveIntegerField()
+
+    tdp = models.PositiveIntegerField(
+        verbose_name="Thermal Design Power(TDP)"
+    )
+
+    cpu_image = models.ImageField(
+        upload_to='cpu_images/'
+    )
+
+    def save(self, *args, **kwargs):
+        storage = S3Boto3Storage()
+        if self.cpu_image:
+            self.cpu_image.name = self.cpu_image.name
+            self.cpu_image = storage.save(self.cpu_image.name, self.cpu_image)
