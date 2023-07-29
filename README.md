@@ -69,7 +69,6 @@ Please ensure that your code follows the project's coding conventions and has ap
 Tony's Hardware wouldn't be possible without the following open-source projects:
 
 - [Django](https://www.djangoproject.com/)
-- [Bootstrap](https://getbootstrap.com/)
 
 ## License
 
