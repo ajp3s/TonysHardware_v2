@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import CASCADE
+from storages.backends.s3boto3 import S3Boto3Storage
 
 
 class RAMMemory(models.Model):
@@ -86,8 +87,13 @@ class RAMMemory(models.Model):
         max_length=100,
     )
 
-    image = models.ImageField()
+    ram_image = models.ImageField()
 
     def get_ram_type_and_frequency(self):
         return self.RAM_FREQUENCIES.get(self.ram_type, ())
 
+    def save(self, *args, **kwargs):
+        storage = S3Boto3Storage()
+        if self.ram_image:
+            self.ram_image.name = self.ram_image.name
+            self.profile_picture = storage.save(self.ram_image.name, self.ram_image)
