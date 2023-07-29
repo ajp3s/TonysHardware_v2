@@ -31,48 +31,6 @@ class RAMMemory(models.Model):
         ("DDR5", "DDR5"),
     )
 
-    RAM_FREQUENCIES = {
-        'DDR2': (
-            ('400Mhz', '400Mhz'),
-            ('533Mhz', '533Mhz'),
-            ('667Mhz', '667Mhz'),
-            ('800Mhz', '800Mhz'),
-            ('1066Mhz', '1066Mhz'),
-        ),
-
-        'DDR3': (
-            ('800Mhz', '800Mhz'),
-            ('1066Mhz', '1066Mhz'),
-            ('1333Mhz', '1333Mhz'),
-            ('1600Mhz', '1600Mhz'),
-            ('1866Mhz', '1866Mhz'),
-            ('2133Mhz', '2133Mhz'),
-        ),
-
-        'DDR4': (
-            ('1600Mhz', '1600Mhz'),
-            ('1866Mhz', '1866Mhz'),
-            ('2133Mhz', '2133Mhz'),
-            ('2400Mhz', '2400Mhz'),
-            ('2666Mhz', '2666Mhz'),
-            ('2933Mhz', '2933Mhz'),
-            ('3200Mhz', '3200Mhz'),
-        ),
-
-        'DDR5': (
-            ('3200Mhz', '3200Mhz'),
-            ('3600Mhz', '3600Mhz'),
-            ('4000Mhz', '4000Mhz'),
-            ('4800Mhz', '4800Mhz'),
-            ('5000Mhz', '5000Mhz'),
-            ('5120Mhz', '5120Mhz'),
-            ('5333Mhz', '5333Mhz'),
-            ('5600Mhz', '5600Mhz'),
-            ('6400Mhz', '6400Mhz'),
-            ('7200Mhz', '7200Mhz'),
-        ),
-
-    }
     brand = models.CharField(
         max_length=50,
         choices=MANUFACTURER_CHOICES,
@@ -90,9 +48,6 @@ class RAMMemory(models.Model):
     ram_image = models.ImageField(
         upload_to='ram_images/'
     )
-
-    def get_ram_type_and_frequency(self):
-        return self.RAM_FREQUENCIES.get(self.ram_type, ())
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
@@ -131,7 +86,8 @@ class Cpu(models.Model):
     L3_cache = models.PositiveIntegerField()
 
     tdp = models.PositiveIntegerField(
-        verbose_name="Thermal Design Power(TDP)"
+        verbose_name="Thermal Design Power(TDP)",
+
     )
 
     cpu_image = models.ImageField(
@@ -287,3 +243,73 @@ class Psu(models.Model):
             self.psu_image = storage.save(self.psu_image.name, self.psu_image)
 
 
+class NvidiaGPU(models.Model):
+    GENERATIONS_CHOICES = (
+        ('GeForce GTX9XX', ' GeForce GTX9XX'),
+        ('GeForce GTX10XX', 'GeForce GTX10XX'),
+        ('GeForce GTX16XX', 'GeForce GTX16XX'),
+        ('GeForce RTX20XX', 'GeForce RTX20XX'),
+        ('GeForce RTX30XX', 'GeForce RTX30XX'),
+        ('GeForce RTX40XX', 'GeForce RTX40XX'),
+    )
+
+    series = models.CharField(
+        max_length=30,
+    )
+
+    model = models.CharField(
+        max_length=100,
+    )
+
+    graphics_processor = models.CharField(
+        max_length=20,
+    )
+
+    architecture = models.CharField(
+        max_length=20,
+
+    )
+
+    process_size = models.CharField(
+        max_length=5,
+    )
+
+    transistors = models.CharField(
+        max_length=30,
+    )
+
+    base_clock = models.PositiveIntegerField()
+
+    boost_clock = models.PositiveIntegerField()
+
+    memory_clock = models.PositiveIntegerField()
+
+    memory_bus_width = models.PositiveIntegerField()
+
+    bandwidth = models.PositiveIntegerField()
+
+    release_date = models.DateField(
+        auto_now=True,
+    )
+
+    tdp = models.PositiveIntegerField(
+        verbose_name="Thermal Design Power(TDP)"
+
+    )
+    suggested_psu = models.CharField(
+        max_length=10,
+    )
+
+    graphics_api_support = models.CharField(
+        max_length=60,
+    )
+
+    nvidia_gpu_image = models.ImageField(
+        upload_to='nvidia_gpu_images/'
+    )
+
+    def save(self, *args, **kwargs):
+        storage = S3Boto3Storage()
+        if self.nvidia_gpu_image:
+            self.nvidia_gpu_image = self.nvidia_gpu_image.name
+            self.nvidia_gpu_image = storage.save(self.nvidia_gpu_image.name, self.nvidia_gpu_image)
