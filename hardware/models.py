@@ -55,6 +55,8 @@ class RAMMemory(models.Model):
             self.ram_image.name = self.ram_image.name
             self.ram_image = storage.save(self.ram_image.name, self.ram_image)
 
+        super().save(*args, **kwargs)
+
 
 class Cpu(models.Model):
     CPU_MANUFACTURERS_CHOICES = (
@@ -99,6 +101,8 @@ class Cpu(models.Model):
         if self.cpu_image:
             self.cpu_image.name = self.cpu_image.name
             self.cpu_image = storage.save(self.cpu_image.name, self.cpu_image)
+
+        super().save(*args, **kwargs)
 
 
 class StorageDrive(models.Model):
@@ -155,6 +159,8 @@ class StorageDrive(models.Model):
         if self.drive_image:
             self.drive_image.name = self.drive_image.name
             self.drive_image = storage.save(self.drive_image.name, self.drive_image)
+
+        super().save(*args, **kwargs)
 
 
 class Psu(models.Model):
@@ -242,6 +248,8 @@ class Psu(models.Model):
             self.psu_image = self.psu_image.name
             self.psu_image = storage.save(self.psu_image.name, self.psu_image)
 
+        super().save(*args, **kwargs)
+
 
 class NvidiaGPU(models.Model):
     GENERATIONS_CHOICES = (
@@ -313,3 +321,5 @@ class NvidiaGPU(models.Model):
         if self.nvidia_gpu_image:
             self.nvidia_gpu_image = self.nvidia_gpu_image.name
             self.nvidia_gpu_image = storage.save(self.nvidia_gpu_image.name, self.nvidia_gpu_image)
+
+        super().save(*args, **kwargs)

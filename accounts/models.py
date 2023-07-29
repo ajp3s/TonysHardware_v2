@@ -3,8 +3,6 @@ from TonysHardware_v2.validators.custom_validators import letters_numbers_and_un
 from django.db import models
 from storages.backends.s3boto3 import S3Boto3Storage
 
-from TonysHardware_v2.settings import AWS_S3_CUSTOM_DOMAIN
-
 
 class BasicUser(AbstractUser):
     username = models.CharField(
@@ -55,15 +53,6 @@ class BasicUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
-
-        if self.pk:
-            try:
-                existing_instance = BasicUser.objects.get(pk=self.pk)
-            except BasicUser.DoesNotExist:
-                existing_instance = None
-
-            if existing_instance and existing_instance.profile_picture:
-                storage.delete(existing_instance.profile_picture.name)
 
         if self.profile_picture:
             self.profile_picture.name = self.profile_picture.name

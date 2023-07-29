@@ -26,10 +26,10 @@ class UserCreationView(gen_views.CreateView):
     model = BasicUserModel
     form_class = BasicUserRegisterForm
     template_name = 'accounts/register.html'
-    reverse_lazy('profile_details')
 
     def form_valid(self, form):
         submit = super().form_valid(form)
+        form.save(submit)
         login(self.request, self.object)
         return submit
 
@@ -61,6 +61,18 @@ class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAcco
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = self.request.user
         return kwargs
+
+    def form_valid(self, form):
+        storage = S3Boto3Storage()
+        existing_instance = self.get_object()
+
+        if 'profile_picture' in form.changed_data:
+
+            old_picture = existing_instance.profile_picture
+            if old_picture:
+                storage.delete(old_picture.name)
+
+        return super().form_valid(form)
 
 
 class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAccountOwnerMixin):
