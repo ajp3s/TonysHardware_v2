@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.core.exceptions import ValidationError
+from TonysHardware_v2.validators.custom_validators import letters_numbers_and_underscores_validator
 from django.db import models
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -9,7 +9,10 @@ from TonysHardware_v2.settings import AWS_S3_CUSTOM_DOMAIN
 class BasicUser(AbstractUser):
     username = models.CharField(
         unique=True,
-        max_length=50
+        max_length=50,
+        validators=(
+            letters_numbers_and_underscores_validator,
+        ),
     )
 
     first_name = models.CharField(
@@ -59,7 +62,7 @@ class BasicUser(AbstractUser):
             except BasicUser.DoesNotExist:
                 existing_instance = None
 
-            if existing_instance and existing_instance.profile_picture != self.profile_picture:
+            if existing_instance and existing_instance.profile_picture:
                 storage.delete(existing_instance.profile_picture.name)
 
         if self.profile_picture:
@@ -72,12 +75,6 @@ class BasicUser(AbstractUser):
         return self.get_full_name()
 
 
-def validate_gallery_size(value):
-    user = value.user_profile
-    if ImageGalleryModel.objects.filter(user_profile=user).count() >= 5:
-        raise ValidationError("You can upload a maximum of 5 images.")
-
-
 class ImageGalleryModel(models.Model):
     user_profile = models.ForeignKey(
         BasicUser,
@@ -87,9 +84,6 @@ class ImageGalleryModel(models.Model):
     image = models.ImageField(
         upload_to='gallery_images/',
 
-        validators=(
-            validate_gallery_size,
-        ),
     )
 
     def save(self, *args, **kwargs):

@@ -92,8 +92,11 @@ class UserProfileDetailsView(gen_views.DetailView, LoginRequiredMixin):
     context_object_name = 'user'
 
     def get_context_data(self, **kwargs):
-        result = super().get_context_data(**kwargs)
-        print(result.get('user').date_joined)
+        context = super().get_context_data(**kwargs)
+        gallery = ImageGalleryModel.objects.filter(user_profile_id=self.request.user.pk)
+        context['gallery'] = gallery
+
+        return context
 
 
 class UserLoginView(LoginView):
