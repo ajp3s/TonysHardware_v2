@@ -11,7 +11,6 @@ PC builds and share their knowledge and experiences.
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Contributing](#contributing)
@@ -32,15 +31,6 @@ To get started with Tony's Hardware, follow these steps:
 5. Install dependencies: `pip install -r requirements.txt`
 6. Set up the database: `python manage.py migrate`
 7. Start the development server: `python manage.py runserver`
-
-## Usage
-
-Tony's Hardware is easy to use. Once the development server is running, open your web browser and go to `http://localhost:8000`. You will be greeted with a user-friendly interface where you can:
-
-- Browse through tutorials on PC building, fixing, and optimization.
-- Create an account to access the social-media features.
-- Showcase your own PC builds with images and descriptions.
-- Interact with other users through comments and likes.
 
 ## Screenshots
 
