@@ -15,7 +15,7 @@
 
     {% if gallery %}
         {% for image in gallery %}
-            <img src="{{ image.url }}" alt="Picture">
+            <img src="{{ image.image.url }}" alt="Picture">
         {% endfor %}
     {% else %}
         "You haven't uploaded any images.

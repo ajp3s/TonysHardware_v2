@@ -1,15 +1,76 @@
-
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% block title %}<title>Home Page</title> {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'common/base.css' %}">
 </head>
-<body>
+
+<body class="body">
+<header class="header">
+     <nav class="navbar">
+        <a href="{% url 'home page' %}">
+        <img src="{%  static 'local_media_files/homepage_icon.png' %}" style="width: 35px; height: 22px;" alt="">
+            Home
+        </a>
+         <a href="{% url 'builds list' %}">
+        <img src="{% static 'local_media_files/news_icon.png' %}" style="width: 50px; height: 35px;" alt="">
+            News
+        </a>
+         <a href="{% url 'gpus list' %}">
+        <img src="{% static 'local_media_files/gpu_image.png' %}"  alt="">
+            GPUs
+        </a>
+         <a href="{% url 'cpus list' %}">
+        <img src="{% static 'local_media_files/cpu_image.png' %}" alt="">
+            CPUs
+        </a>
+         <a href="{% url 'ram memories list' %}">
+        <img src="{% static 'local_media_files/ram_memory_image.png' %}" alt="">
+            RAM
+        </a>
+         <a href="{% url 'motherboards list' %}">
+        <img src="{% static 'local_media_files/motherboard_image.png' %}" alt="">
+            Motherboards
+        </a>
+         <a href="{% url 'storage categories' %}">
+        <img src="{% static 'local_media_files/sata_2.5_nvme_drive_image.png' %}" style="width: 50px; height: 35px;" alt="">
+            Storage
+        </a>
+         <a href="{% url 'power supplies list' %}">
+        <img src="{% static 'local_media_files/psu_image.png' %}" style="width: 55px; height: 40px;" alt="">
+            PSUs
+        </a>
+         {% if request.user.is_authenticated %}
+         <a href="{% url 'dashboard' %}">
+        <img src="{% static 'local_media_files/profile_icon.png' %}" alt="">
+            Your Profile
+        </a>
+         <a href="{% url 'logout' %}">
+        <img src="{% static 'local_media_files/logout_icon.png' %}" style="width: 35px; height: 30px;" alt="">
+            Logout
+        </a>
+         {% else %}
+         <a href="{% url 'registration' %}">
+        <img src="{% static 'local_media_files/register_icon.png' %}" style="width: 30px; height: 22px;" alt="">
+            Register
+        </a>
+         <a href="{% url 'login' %}">
+        <img src="{% static 'local_media_files/login_icon.png' %}" style="width: 30px; height: 30px;" alt="Login">
+            Login
+        </a>
+         {% endif %}
+    </nav>
+</header>
+
+
 {% block content %}
 {% endblock %}
+
+
+<footer class="footer">
+    <p>&copy; 2023 Tony's Hardware. All rights reserved.</p>
+</footer>
+
 </body>
 </html>

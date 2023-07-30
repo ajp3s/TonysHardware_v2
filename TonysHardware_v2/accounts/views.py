@@ -137,7 +137,7 @@ class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountO
         return reverse_lazy('profile_details', kwargs={'pk': self.request.user.pk})
 
     def form_valid(self, form):
-        form.instance = self.request.user
+        form.instance.user_profile = self.request.user
         return super().form_valid(form)
 
 

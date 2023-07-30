@@ -82,4 +82,4 @@ class ImageGalleryModel(models.Model):
             self.image.name = self.image.name
             self.image = storage.save(self.image.name, self.image)
 
-            super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
