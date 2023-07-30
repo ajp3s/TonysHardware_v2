@@ -253,12 +253,26 @@ class Psu(models.Model):
 
 class NvidiaGPU(models.Model):
     GENERATIONS_CHOICES = (
-        ('GeForce GTX9XX', ' GeForce GTX9XX'),
-        ('GeForce GTX10XX', 'GeForce GTX10XX'),
-        ('GeForce GTX16XX', 'GeForce GTX16XX'),
-        ('GeForce RTX20XX', 'GeForce RTX20XX'),
-        ('GeForce RTX30XX', 'GeForce RTX30XX'),
-        ('GeForce RTX40XX', 'GeForce RTX40XX'),
+        ('Nvidia GeForce RTX', 'Nvidia GeForce RTX'),
+        ('Nvidia GeForce GTX', 'Nvidia GeForce GTX'),
+        ('Nvidia RTX', 'Nvidia RTX'),
+        ('Nvidia T', 'Nvidia T'),
+        ('Nvidia L', 'Nvidia L'),
+    )
+
+    TYPES_CHOICES = (
+        ('Desktop', 'Desktop'),
+        ('Laptop', 'Laptop'),
+    )
+    type = models.CharField(
+        max_length=20,
+        choices=TYPES_CHOICES
+    )
+
+    generation = models.CharField(
+        max_length=20,
+        choices=GENERATIONS_CHOICES,
+        null=True,
     )
 
     series = models.CharField(
@@ -282,7 +296,7 @@ class NvidiaGPU(models.Model):
         max_length=5,
     )
 
-    transistors = models.CharField(
+    transistors_count = models.CharField(
         max_length=30,
     )
 
@@ -294,7 +308,7 @@ class NvidiaGPU(models.Model):
 
     memory_bus_width = models.PositiveIntegerField()
 
-    bandwidth = models.PositiveIntegerField()
+    memory_bandwidth = models.PositiveIntegerField()
 
     release_date = models.DateField(
         auto_now=True,
@@ -316,10 +330,111 @@ class NvidiaGPU(models.Model):
         upload_to='nvidia_gpu_images/'
     )
 
+    maximum_gpu_temperature = models.CharField(
+        max_length=5,
+        null=True
+    )
+
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
         if self.nvidia_gpu_image:
             self.nvidia_gpu_image = self.nvidia_gpu_image.name
             self.nvidia_gpu_image = storage.save(self.nvidia_gpu_image.name, self.nvidia_gpu_image)
+
+        super().save(*args, **kwargs)
+
+
+class AMDRadeonGPU(models.Model):
+    GENERATIONS_CHOICES = (
+        ('Radeon RX', ' Radeon RX'),
+        ('Radeon R9', 'Radeon R9'),
+        ('Radeon R8', 'Radeon R8'),
+        ('Radeon R7', 'Radeon R7'),
+        ('Radeon R6', 'Radeon R6'),
+        ('Radeon R5', 'Radeon R5'),
+        ('Radeon R4', 'Radeon R4'),
+        ('Radeon R3', 'Radeon R3'),
+        ('Radeon R2', 'Radeon R2'),
+    )
+
+    TYPES_CHOICES = (
+        ('Desktop', 'Desktop'),
+        ('Laptop', 'Laptop'),
+        ('Integrated(iGPU)', 'Integrated(iGPU)'),
+    )
+    generation = models.CharField(
+        max_length=20,
+        choices=GENERATIONS_CHOICES,
+    )
+
+    type = models.CharField(
+        max_length=20,
+        choices=TYPES_CHOICES,
+    )
+
+    series = models.CharField(
+        max_length=30,
+    )
+
+    model = models.CharField(
+        max_length=100,
+    )
+
+    graphics_processor = models.CharField(
+        max_length=20,
+    )
+
+    architecture = models.CharField(
+        max_length=20,
+
+    )
+
+    process_size = models.CharField(
+        max_length=5,
+    )
+
+    transistors_count = models.CharField(
+        max_length=30,
+    )
+
+    base_clock = models.PositiveIntegerField()
+
+    boost_clock = models.PositiveIntegerField()
+
+    memory_clock = models.PositiveIntegerField()
+
+    memory_bus_width = models.PositiveIntegerField()
+
+    memory_bandwidth = models.PositiveIntegerField()
+
+    release_date = models.DateField(
+        auto_now=True,
+    )
+
+    tdp = models.PositiveIntegerField(
+        verbose_name="Thermal Design Power(TDP)"
+
+    )
+    suggested_psu = models.CharField(
+        max_length=10,
+    )
+
+    graphics_api_support = models.CharField(
+        max_length=60,
+    )
+
+    amd_radeon_gpu_image = models.ImageField(
+        upload_to='nvidia_gpu_images/'
+    )
+
+    maximum_gpu_temperature = models.CharField(
+        max_length=5,
+        null=True
+    )
+    def save(self, *args, **kwargs):
+        storage = S3Boto3Storage()
+        if self.amd_radeon_gpu_image:
+            self.amd_radeon_gpu_image = self.amd_radeon_gpu_image.name
+            self.amd_radeon_gpu_image = storage.save(self.amd_radeon_gpu_image.name, self.amd_radeon_gpu_image)
 
         super().save(*args, **kwargs)
