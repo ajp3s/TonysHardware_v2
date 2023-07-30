@@ -10,12 +10,16 @@ html, body {
   min-height: 100vh;
 }
 
+
 .header {
+  background-image: url("/static/local_media_files/TH_header.png");
   position: relative;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  height: 300px;
+  height: 170px;
+  display: flex;
+  align-items: center;
 }
 
 .body {
@@ -23,10 +27,18 @@ html, body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  flex-grow: 1; /* Allows the body section to grow and fill the remaining space */
+  flex-grow: 1;
   flex-flow: column;
   min-height: 100vh;
 }
+
+/*.body {*/
+/*  background-color: #f0f0f0; !* Set the background color for the body *!*/
+/*  flex-grow: 1; !* Allows the body section to grow and fill the remaining space *!*/
+/*  flex-flow: column;*/
+/*  display: flex; !* Convert body to a flex container *!*/
+/*  align-items: center; !* Center the content vertically *!*/
+/*}*/
 
 .footer {
   background-size: cover;
@@ -39,7 +51,7 @@ html, body {
 }
 
 .navbar {
-  position: absolute;
+  position: absolute; /* Make the navbar sticky at the top */
   bottom: 0;
   left: 0;
   width: 100%;
@@ -56,15 +68,15 @@ html, body {
   flex-direction: row-reverse;
   align-items: center;
   text-decoration: none;
-  color: #000000; /* Set the text color for the links */
+  color: #000000;
 }
 
 .navbar a img {
-  width: 80px; /* Adjust the size of the images */
+  width: 80px;
   height: 50px;
-  margin-bottom: 1px; /* Add some space below the images */
+  margin-bottom: 1px;
 }
 
 .navbar a:hover {
-  color: #ffffff; /* Set the hover color for the links */
+  color: #ffffff;
 }
