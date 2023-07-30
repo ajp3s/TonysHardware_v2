@@ -18,20 +18,6 @@ PC builds and share their knowledge and experiences.
 - [License](#license)
 - [Contact](#contact)
 
-## Installation
-
-To get started with Tony's Hardware, follow these steps:
-
-1. Clone this repository: `git clone https://github.com/ajp3s/TonysHardware_v2.git`
-2. Navigate to the project directory: `TonysHardware_v2`
-3. Create a virtual environment: `python -m venv venv`
-4. Activate the virtual environment:
-   - On Windows: `venv\Scripts\activate`
-   - On macOS and Linux: `source venv/bin/activate`
-5. Install dependencies: `pip install -r requirements.txt`
-6. Set up the database: `python manage.py migrate`
-7. Start the development server: `python manage.py runserver`
-
 ## Screenshots
 
 ![Home Page](screenshots/Screenshot%20(12).png)
