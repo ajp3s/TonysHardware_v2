@@ -1,60 +1,84 @@
+from django.urls import reverse_lazy
 from django.views import generic as gen_views
-from .utils import get_model_from_query_params, create_hardware_model_form
+
+
+from .utils import create_hardware_model_form, get_model_from_model_name
 
 
 class HardwareAddView(gen_views.CreateView):
-    model = None
+    template_name = 'hardware/add_hardware.html'
+
+    def get_model(self):
+        return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_form(self, form_class=None):
         return create_hardware_model_form(self.request, **self.get_form_kwargs())
 
-    def get_model(self, model_name):
-        model = get_model_from_query_params(self.request)
-        return model
-
     def get_success_url(self):
-        return '/success/'
+        return reverse_lazy('details_hardware', kwargs={'model': self.get_model(), 'pk': self.object.pk})
 
 
 class HardwareUpdateView(gen_views.UpdateView):
-    model = None
+
+    def get_model(self):
+        return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_form(self, form_class=None):
         return create_hardware_model_form(self.request, **self.get_form_kwargs())
 
     def get_object(self, queryset=None):
-        self.model = get_model_from_query_params(self.request)
-        return super().get_object(queryset)
+        model = self.get_model()
+        if model is not None:
+            pk = self.kwargs.get(self.pk_url_kwarg)
+            return model.objects.get(pk=pk)
 
     def get_success_url(self):
-        return '/success/'
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        return reverse_lazy('details_hardware', kwargs={'model': self.get_model(), 'pk': self.object.pk})
 
 
 class HardwareDetailView(gen_views.DetailView):
-    model = None
+    template_name = 'hardware/details_hardware.html'
+
+    def get_model(self):
+        return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_object(self, queryset=None):
-        self.model = get_model_from_query_params(self.request)
-        return super().get_object(queryset)
+        model = self.get_model()
+        if model is not None:
+            pk = self.kwargs.get(self.pk_url_kwarg)
+            return model.objects.get(pk=pk)
 
 
 class HardwareDeleteView(gen_views.DeleteView):
-    model = None
+    template_name = 'hardware/delete_hardware.html'
+
+    def get_model(self):
+        return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_object(self, queryset=None):
-        self.model = get_model_from_query_params(self.request)
+        self.model = self.get_model()
         return super().get_object(queryset)
 
     def get_success_url(self):
-        return '/success/'
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        return reverse_lazy('list_hardware', kwargs={'model': self.get_model(), 'pk': pk})
 
     def get_form(self, form_class=None):
         return create_hardware_model_form(self.request, **self.get_form_kwargs())
 
 
 class HardwareListView(gen_views.ListView):
-    model = None
+    context_object_name = 'list'
+    template_name = 'hardware/hardware_list.html'
+    print(context_object_name)
+
+    def get_model(self):
+        return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_queryset(self):
-        self.model = get_model_from_query_params(self.request)
-        return super().get_queryset()
+        model = self.get_model()
+        if model:
+            return model.objects.all()
+        else:
+            raise ValueError("Invalid model specified.")

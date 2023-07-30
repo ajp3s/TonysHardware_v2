@@ -1,28 +1,26 @@
-from TonysHardware_v2.hardware.models import NvidiaGPU, AMDRadeonGPU, Psu, Cpu, StorageDrive, RAMMemory, MotherBoard
 from django.forms import modelform_factory
 
-def get_model_from_query_params(request):
-    model_name = request.GET.get('model')
-    MODELS = {
-        'NvidiaGPU': NvidiaGPU,
-        'AMDRadeonGPU': AMDRadeonGPU,
-        'RAMMemory': RAMMemory,
-        'Cpu': Cpu,
-        'StorageDrive': StorageDrive,
-        'MotherBoard': MotherBoard,
-        'Psu': Psu,
+from TonysHardware_v2.hardware.models import RAMMemory, Cpu, StorageDrive, Psu, NvidiaGPU, AMDRadeonGPU, MotherBoard
 
-    }
+MODELS = {
+    'RAMMemory': RAMMemory,
+    'Cpu': Cpu,
+    'StorageDrive': StorageDrive,
+    'Psu': Psu,
+    'NvidiaGPU': NvidiaGPU,
+    'AMDRadeonGPU': AMDRadeonGPU,
+    'MotherBoard': MotherBoard,
 
-    model = MODELS.get(model_name)
-    if model is None:
-        raise ValueError("Invalid model selected.")
-    return model
+}
 
 
-def create_hardware_model_form(request, *args, **kwargs):
-    model = get_model_from_query_params(request)
+def create_hardware_model_form(*args, **kwargs):
+    model = kwargs.get('model', None)
     if model is not None:
         form_class = modelform_factory(model, fields='__all__')
         return form_class(*args, **kwargs)
-    raise ValueError("Invalid model specified.")
+    raise ValueError("Invalid model selected.")
+
+
+def get_model_from_model_name(model_name):
+    return MODELS.get(model_name, None)

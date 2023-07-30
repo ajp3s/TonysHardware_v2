@@ -1,12 +1,12 @@
 from django import forms
 
-from TonysHardware_v2.hardware.utils import get_model_from_query_params
+from TonysHardware_v2.hardware.utils import get_model_from_model_name
 
 
 class HardwareModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        model = get_model_from_query_params(kwargs.get('request'))
+        model = get_model_from_model_name(kwargs.get('request'))
         if model is not None:
             self.Meta.model = model
             self.Meta.fields = '__all__'
