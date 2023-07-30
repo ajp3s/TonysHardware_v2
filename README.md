@@ -10,7 +10,6 @@ PC builds and share their knowledge and experiences.
 
 ## Table of Contents
 
-- [Installation](#installation)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Contributing](#contributing)
