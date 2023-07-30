@@ -1,29 +1,16 @@
 from django import forms
 
-from TonysHardware_v2.hardware.models import RAMMemory, Cpu, StorageDrive, Psu, NvidiaGPU
+from TonysHardware_v2.hardware.utils import get_model_from_query_params
 
 
 class HardwareModelForm(forms.ModelForm):
-    model = None  # We'll set this dynamically based on the argument received
-
-    def get_model(self, model_name):
-        models = {
-            'RAMMemory': RAMMemory,
-            'Cpu': Cpu,
-            'StorageDrive': StorageDrive,
-            'Psu': Psu,
-            'NvidiaGPU': NvidiaGPU,
-        }
-        return models.get(model_name, None)
-
     def __init__(self, *args, **kwargs):
-        model_name = kwargs.pop('model', None)
-        self.model = self.get_model(model_name)
         super().__init__(*args, **kwargs)
-        if self.model:
-            # Set the form fields dynamically based on the model
-            self.fields = forms.ALL_FIELDS  # Or you can customize this based on your requirements
+        model = get_model_from_query_params(kwargs.get('request'))
+        if model is not None:
+            self.Meta.model = model
+            self.Meta.fields = '__all__'
 
     class Meta:
-        model = None  # We'll set this dynamically based on the argument received
+        model = None
         fields = '__all__'

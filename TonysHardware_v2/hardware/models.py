@@ -173,10 +173,10 @@ class Psu(models.Model):
         ('Be quiet!', 'Be quiet!'),
         ('Black Box', 'Black Box'),
         ('Cooler Master', 'Cooler Master'),
-        ('Coolmax','Coolmax'),
-        ('Corsair','Corsair'),
-        ('Curtiss-Wright','Curtiss-Wright'),
-        ('Deepcool','Deepcool'),
+        ('Coolmax', 'Coolmax'),
+        ('Corsair', 'Corsair'),
+        ('Curtiss-Wright', 'Curtiss-Wright'),
+        ('Deepcool', 'Deepcool'),
         ('Delta Electronics', 'Delta Electronics'),
         ('Dynapower USA', 'Dynapower USA'),
         ('Eaton', 'Eaton'),
@@ -415,6 +415,7 @@ class AMDRadeonGPU(models.Model):
         verbose_name="Thermal Design Power(TDP)"
 
     )
+
     suggested_psu = models.CharField(
         max_length=10,
     )
@@ -431,6 +432,7 @@ class AMDRadeonGPU(models.Model):
         max_length=5,
         null=True
     )
+
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
         if self.amd_radeon_gpu_image:
@@ -438,3 +440,7 @@ class AMDRadeonGPU(models.Model):
             self.amd_radeon_gpu_image = storage.save(self.amd_radeon_gpu_image.name, self.amd_radeon_gpu_image)
 
         super().save(*args, **kwargs)
+
+
+class MotherBoard(models.Model):
+    pass
