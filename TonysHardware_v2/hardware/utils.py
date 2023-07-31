@@ -1,6 +1,6 @@
 from django.forms import modelform_factory
 
-from TonysHardware_v2.hardware.models import RAMMemory, Cpu, StorageDrive, Psu, NvidiaGPU, AMDRadeonGPU, MotherBoard
+from TonysHardware_v2.hardware.models import RAMMemory, Cpu, StorageDrive, Psu, NvidiaGPU, AMDRadeonGPU, MotherBoardModel
 
 MODELS = {
     'RAMMemory': RAMMemory,
@@ -9,7 +9,7 @@ MODELS = {
     'Psu': Psu,
     'NvidiaGPU': NvidiaGPU,
     'AMDRadeonGPU': AMDRadeonGPU,
-    'MotherBoard': MotherBoard,
+    'MotherBoard': MotherBoardModel,
 
 }
 
