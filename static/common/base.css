@@ -1,15 +1,7 @@
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
 }
-
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 
 .header {
   background-image: url("/static/local_media_files/TH_header.png");
@@ -31,14 +23,6 @@ html, body {
   flex-flow: column;
   min-height: 100vh;
 }
-
-/*.body {*/
-/*  background-color: #f0f0f0; !* Set the background color for the body *!*/
-/*  flex-grow: 1; !* Allows the body section to grow and fill the remaining space *!*/
-/*  flex-flow: column;*/
-/*  display: flex; !* Convert body to a flex container *!*/
-/*  align-items: center; !* Center the content vertically *!*/
-/*}*/
 
 .footer {
   background-size: cover;

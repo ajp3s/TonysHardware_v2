@@ -6,9 +6,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'common/base.css' %}">
 </head>
 
-<body class="body">
-<header class="header">
-     <nav class="navbar">
+<body>
+    <header class="header">
+
+    </header>
+
+    <nav class="navbar">
         <a href="{% url 'home page' %}">
         <img src="{%  static 'local_media_files/homepage_icon.png' %}" style="width: 35px; height: 22px;" alt="">
             Home
@@ -55,18 +58,16 @@
         <img src="{% static 'local_media_files/register_icon.png' %}" style="width: 30px; height: 22px;" alt="">
             Register
         </a>
-         <a href="{% url 'log' %}">
+         <a href="{% url 'login' %}">
         <img src="{% static 'local_media_files/login_icon.png' %}" style="width: 30px; height: 30px;" alt="Login">
             Login
         </a>
          {% endif %}
     </nav>
-</header>
-
-
-{% block content %}
-{% endblock %}
-
+    <section class="body">
+        {% block content %}
+        {% endblock %}
+    </section>
 
 <footer class="footer">
     <p>&copy; 2023 Tony's Hardware. All rights reserved.</p>
