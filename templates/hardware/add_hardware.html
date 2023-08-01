@@ -1,9 +1,22 @@
 {% extends 'base.html' %}
 {% block title %}Add component{% endblock %}
 {% block content %}
-    <form action="{% url 'add_hardware' model=self.kwargs.model %}" method="post" enctype="multipart/form-data">
-    {{ form.as_p }}
-    {% csrf_token %}
-    <button type="submit">Save</button>
+    <form action="{% url 'add_hardware' model=request.resolver_match.kwargs.model %}" method="post" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Save</button>
     </form>
+
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        <ul>
+          {% for field_errors in form.errors %}
+            {% for error in field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
 {% endblock %}

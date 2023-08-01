@@ -442,26 +442,26 @@ class AMDRadeonGPU(models.Model):
         super().save(*args, **kwargs)
 
 
-class MotherBoardModeln(models.Model):
+class MotherBoardModel(models.Model):
     # TODO
     pass
-
-
-class IntelGPUModel(models.Model):
-    # TODO
-    pass
-
-
-class NvmeSSDModel(models.Model):
-    # TODO
-    pass
-
-
-class SataSSDModel(models.Model):
-    # TODO
-    pass
-
-
-class HDDModel(models.Model):
-    # TODO
-    pass
+#
+#
+# class IntelGPUModel(models.Model):
+#     # TODO
+#     pass
+#
+#
+# class NvmeSSDModel(models.Model):
+#     # TODO
+#     pass
+#
+#
+# class SataSSDModel(models.Model):
+#     # TODO
+#     pass
+#
+#
+# class HDDModel(models.Model):
+#     # TODO
+#     pass

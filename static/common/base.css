@@ -35,14 +35,14 @@ html, body {
 }
 
 .navbar {
-  position: absolute; /* Make the navbar sticky at the top */
-  bottom: 0;
+  position: absolute;
+  top: 0;
   left: 0;
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #6e0f15; /* Set the background color for the navbar */
+  background-color: #6e0f15;
   font-size: 22px;
   font-style: normal;
 }
