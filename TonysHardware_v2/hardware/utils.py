@@ -14,12 +14,5 @@ MODELS = {
 }
 
 
-def create_hardware_model_form(model, *args, **kwargs):
-    if model is not None:
-        form_class = modelform_factory(model, fields='__all__')
-        return form_class(*args, **kwargs)
-    raise ValueError("Invalid component selected.")
-
-
 def get_model_from_model_name(model_name):
     return MODELS.get(model_name, None)

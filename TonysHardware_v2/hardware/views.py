@@ -1,8 +1,9 @@
+from django.forms import modelform_factory
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
 
 
-from .utils import create_hardware_model_form, get_model_from_model_name
+from .utils import get_model_from_model_name
 
 
 class HardwareAddView(gen_views.CreateView):
@@ -12,21 +13,10 @@ class HardwareAddView(gen_views.CreateView):
         return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_form(self, form_class=None):
-        return create_hardware_model_form(self.get_model())
+        return modelform_factory(self.get_model(), fields='__all__')
 
     def get_success_url(self):
-        return reverse_lazy('details_hardware', kwargs={'model': self.get_model(), 'pk': self.object.pk})
-
-    def form_valid(self, form):
-        print("Form is valid:", form.is_valid())
-
-        if form.is_valid():
-            self.object = form.save()
-            print("Form data saved successfully.")
-            return super().form_valid(form)
-
-        print("Form data not saved. Form errors:", form.errors)
-        return self.form_invalid(form)
+        return reverse_lazy('list_hardware', kwargs={'model': self.get_model()})
 
 
 class HardwareUpdateView(gen_views.UpdateView):
@@ -36,7 +26,7 @@ class HardwareUpdateView(gen_views.UpdateView):
         return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_form(self, form_class=None):
-        return create_hardware_model_form(self.get_model())
+        return modelform_factory(self.get_model(), fields='__all__')
 
     def get_object(self, queryset=None):
         model = self.get_model()
@@ -77,7 +67,7 @@ class HardwareDeleteView(gen_views.DeleteView):
         return reverse_lazy('list_hardware', kwargs={'model': self.get_model(), 'pk': pk})
 
     def get_form(self, form_class=None):
-        return create_hardware_model_form(self.request, **self.get_form_kwargs())
+        return modelform_factory(self.request, **self.get_form_kwargs(), fields='__all__')
 
     def form_valid(self, form):
         instance = self.get_object()

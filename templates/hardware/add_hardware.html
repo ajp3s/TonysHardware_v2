@@ -7,16 +7,4 @@
         <button type="submit">Save</button>
     </form>
 
-    {% if form.errors %}
-      <div class="alert alert-danger">
-        <ul>
-          {% for field_errors in form.errors %}
-            {% for error in field_errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-
 {% endblock %}
