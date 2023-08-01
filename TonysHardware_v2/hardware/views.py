@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import modelform_factory
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
@@ -6,14 +7,22 @@ from django.views import generic as gen_views
 from .utils import get_model_from_model_name
 
 
+class HardwareForm(forms.ModelForm):
+    class Meta:
+        model = None  # The model instance will be set dynamically
+        fields = '__all__'
+
+
 class HardwareAddView(gen_views.CreateView):
     template_name = 'hardware/add_hardware.html'
 
     def get_model(self):
         return get_model_from_model_name(self.kwargs.get('model'))
 
-    def get_form(self, form_class=None):
-        return modelform_factory(self.get_model(), fields='__all__')
+    def get_form_class(self, form_class=None):
+        form_class = HardwareForm
+        form_class.Meta.model_class = self.get_model()
+        return form_class
 
     def get_success_url(self):
         return reverse_lazy('list_hardware', kwargs={'model': self.get_model()})
