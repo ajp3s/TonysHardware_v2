@@ -36,6 +36,10 @@ class RAMMemory(models.Model):
         choices=MANUFACTURER_CHOICES,
     )
 
+    capacity = models.PositiveIntegerField(
+
+    )
+
     ram_type = models.CharField(
         max_length=10,
         choices=DDR_RAM_TYPES,
@@ -56,6 +60,9 @@ class RAMMemory(models.Model):
             self.ram_image = storage.save(self.ram_image.name, self.ram_image)
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.brand} {self.ram_type} {self.ram_frequency}"
 
 
 class Cpu(models.Model):
@@ -103,6 +110,9 @@ class Cpu(models.Model):
             self.cpu_image = storage.save(self.cpu_image.name, self.cpu_image)
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.cpu_image} {self.manufacturer} {self.model}'
 
 
 class StorageDrive(models.Model):
@@ -161,6 +171,9 @@ class StorageDrive(models.Model):
             self.drive_image = storage.save(self.drive_image.name, self.drive_image)
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.drive_image} {self.type} {self.capacity}"
 
 
 class Psu(models.Model):
@@ -225,7 +238,10 @@ class Psu(models.Model):
 
     max_dc_output = models.PositiveIntegerField()
 
-    efficiency_standard = efficiency_standard_choices
+    efficiency_standard = models.CharField(
+        max_length=50,
+        choices=efficiency_standard_choices,
+    )
 
     modular = models.CharField(
         max_length=50,
@@ -249,6 +265,9 @@ class Psu(models.Model):
             self.psu_image = storage.save(self.psu_image.name, self.psu_image)
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.psu_image} {self.manufacturer} {self.max_dc_output} {self.efficiency_standard} {self.modular}"
 
 
 class NvidiaGPU(models.Model):
@@ -343,6 +362,8 @@ class NvidiaGPU(models.Model):
 
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return f'{self.nvidia_gpu_image} '
 
 class AMDRadeonGPU(models.Model):
     GENERATIONS_CHOICES = (
