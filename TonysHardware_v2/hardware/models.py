@@ -49,15 +49,15 @@ class RAMMemory(models.Model):
         max_length=100,
     )
 
-    ram_image = models.ImageField(
+    image = models.ImageField(
         upload_to='ram_images/'
     )
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
-        if self.ram_image:
-            self.ram_image.name = self.ram_image.name
-            self.ram_image = storage.save(self.ram_image.name, self.ram_image)
+        if self.image:
+            self.image.name = self.image.name
+            self.image = storage.save(self.image.name, self.image)
 
         super().save(*args, **kwargs)
 
@@ -99,20 +99,20 @@ class Cpu(models.Model):
 
     )
 
-    cpu_image = models.ImageField(
+    image = models.ImageField(
         upload_to='cpu_images/'
     )
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
-        if self.cpu_image:
-            self.cpu_image.name = self.cpu_image.name
-            self.cpu_image = storage.save(self.cpu_image.name, self.cpu_image)
+        if self.image:
+            self.image.name = self.image.name
+            self.image = storage.save(self.image.name, self.image)
 
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.cpu_image} {self.manufacturer} {self.model}'
+        return f'{self.image} {self.manufacturer} {self.model}'
 
 
 class StorageDrive(models.Model):
@@ -159,21 +159,21 @@ class StorageDrive(models.Model):
         max_length=50,
     )
 
-    drive_image = models.ImageField(
+    image = models.ImageField(
         upload_to='storage_drivers_images/'
     )
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
 
-        if self.drive_image:
-            self.drive_image.name = self.drive_image.name
-            self.drive_image = storage.save(self.drive_image.name, self.drive_image)
+        if self.image:
+            self.image.name = self.image.name
+            self.image = storage.save(self.image.name, self.image)
 
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.drive_image} {self.type} {self.capacity}"
+        return f"{self.image} {self.type} {self.capacity}"
 
 
 class Psu(models.Model):
@@ -254,20 +254,21 @@ class Psu(models.Model):
         null=True,
     )
 
-    psu_image = models.ImageField(
+    image = models.ImageField(
         upload_to='psu_images/'
     )
 
     def save(self, *args, **kwargs):
+
         storage = S3Boto3Storage()
-        if self.psu_image:
-            self.psu_image = self.psu_image.name
-            self.psu_image = storage.save(self.psu_image.name, self.psu_image)
+        if self.image:
+            self.image = self.image.name
+            self.image = storage.save(self.image.name, self.image)
 
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.psu_image} {self.manufacturer} {self.max_dc_output} {self.efficiency_standard} {self.modular}"
+        return f"{self.image} {self.manufacturer} {self.max_dc_output} {self.efficiency_standard} {self.modular}"
 
 
 class NvidiaGPU(models.Model):
@@ -345,7 +346,7 @@ class NvidiaGPU(models.Model):
         max_length=60,
     )
 
-    nvidia_gpu_image = models.ImageField(
+    image = models.ImageField(
         upload_to='nvidia_gpu_images/'
     )
 
@@ -356,14 +357,15 @@ class NvidiaGPU(models.Model):
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
-        if self.nvidia_gpu_image:
-            self.nvidia_gpu_image = self.nvidia_gpu_image.name
-            self.nvidia_gpu_image = storage.save(self.nvidia_gpu_image.name, self.nvidia_gpu_image)
+        if self.image:
+            self.image = self.image.name
+            self.image = storage.save(self.image.name, self.image)
 
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.nvidia_gpu_image} '
+        return f'{self.image} '
+
 
 class AMDRadeonGPU(models.Model):
     GENERATIONS_CHOICES = (
@@ -445,7 +447,7 @@ class AMDRadeonGPU(models.Model):
         max_length=60,
     )
 
-    amd_radeon_gpu_image = models.ImageField(
+    image = models.ImageField(
         upload_to='nvidia_gpu_images/'
     )
 
@@ -456,9 +458,9 @@ class AMDRadeonGPU(models.Model):
 
     def save(self, *args, **kwargs):
         storage = S3Boto3Storage()
-        if self.amd_radeon_gpu_image:
-            self.amd_radeon_gpu_image = self.amd_radeon_gpu_image.name
-            self.amd_radeon_gpu_image = storage.save(self.amd_radeon_gpu_image.name, self.amd_radeon_gpu_image)
+        if self.image:
+            self.image = self.image.name
+            self.image = storage.save(self.image.name, self.image)
 
         super().save(*args, **kwargs)
 
