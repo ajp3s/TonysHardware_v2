@@ -4,28 +4,22 @@ from django.urls import reverse_lazy
 from django.views import generic as gen_views
 
 
-from .utils import get_model_from_model_name
-
-
-class HardwareForm(forms.ModelForm):
-    class Meta:
-        model = None  # The model instance will be set dynamically
-        fields = '__all__'
+from .utils import get_model_from_model_name, create_modelform
 
 
 class HardwareAddView(gen_views.CreateView):
     template_name = 'hardware/add_hardware.html'
 
+    def get_form_class(self):
+        model = self.get_model()
+        form_class = create_modelform(model)
+        return form_class
+
     def get_model(self):
         return get_model_from_model_name(self.kwargs.get('model'))
 
-    def get_form_class(self, form_class=None):
-        form_class = HardwareForm
-        form_class.Meta.model_class = self.get_model()
-        return form_class
-
     def get_success_url(self):
-        return reverse_lazy('list_hardware', kwargs={'model': self.get_model()})
+        return reverse_lazy('list_hardware', kwargs={'model': self.request.resolver_match.kwargs.get('model', None)})
 
 
 class HardwareUpdateView(gen_views.UpdateView):
@@ -92,7 +86,7 @@ class HardwareListView(gen_views.ListView):
         return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_queryset(self):
-        model = self.get_model()
+        model = get_model_from_model_name(self.kwargs.get('model'))
         if model:
             return model.objects.all()
         else:
