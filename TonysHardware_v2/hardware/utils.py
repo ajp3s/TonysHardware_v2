@@ -25,3 +25,13 @@ def create_modelform(model_input):
             fields = '__all__'
 
     return AbstractModelForm
+
+
+def create_disabled_modelform(model_input):
+    class DisabledAbstractModelForm(forms.ModelForm):
+        class Meta:
+            model = model_input
+            fields = '__all__'
+            for field in form.fields.values():
+                field.widget.attrs['disabled'] = True
+    return DisabledAbstractModelForm

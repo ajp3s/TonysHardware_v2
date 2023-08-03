@@ -62,7 +62,7 @@ class RAMMemory(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.brand} {self.ram_type} {self.ram_frequency}"
+        return f"{self.brand} {self.ram_type} {self.capacity}GB {self.ram_frequency}Mhz"
 
 
 class Cpu(models.Model):

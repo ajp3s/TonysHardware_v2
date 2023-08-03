@@ -44,6 +44,7 @@ class HardwareUpdateView(gen_views.UpdateView):
 
 class HardwareDetailView(gen_views.DetailView):
     template_name = 'hardware/details_hardware.html'
+    context_object_name = 'component'
 
     def get_model(self):
         return get_model_from_model_name(self.kwargs.get('model'))
@@ -68,14 +69,6 @@ class HardwareDeleteView(gen_views.DeleteView):
     def get_success_url(self):
         pk = self.kwargs.get(self.pk_url_kwarg)
         return reverse_lazy('list_hardware', kwargs={'model': self.get_model(), 'pk': pk})
-
-    def get_form(self, form_class=None):
-        return modelform_factory(self.request, **self.get_form_kwargs(), fields='__all__')
-
-    def form_valid(self, form):
-        instance = self.get_object()
-        instance.delete()
-        return super().form_valid(form)
 
 
 class HardwareListView(gen_views.ListView):
