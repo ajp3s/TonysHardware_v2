@@ -1,8 +1,9 @@
 from django import forms
 from django.forms import modelform_factory
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
-
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from .utils import get_model_from_model_name, create_modelform
 
@@ -68,7 +69,18 @@ class HardwareDeleteView(gen_views.DeleteView):
 
     def get_success_url(self):
         pk = self.kwargs.get(self.pk_url_kwarg)
-        return reverse_lazy('list_hardware', kwargs={'model': self.get_model(), 'pk': pk})
+        return reverse_lazy('list_hardware', kwargs={'model': self.request.resolver_match.kwargs.get('model', None), 'pk': pk})
+
+    def post(self, request, *args, **kwargs):
+        storage = S3Boto3Storage()
+        self.object = self.get_object()
+        
+        if self.object.image:
+            storage.delete(self.object.image.name)
+        success_url = self.get_success_url()
+        self.object.delete()
+
+        return redirect(success_url)
 
 
 class HardwareListView(gen_views.ListView):
