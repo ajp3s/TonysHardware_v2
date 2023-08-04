@@ -74,7 +74,7 @@ class HardwareDeleteView(gen_views.DeleteView):
     def post(self, request, *args, **kwargs):
         storage = S3Boto3Storage()
         self.object = self.get_object()
-        
+
         if self.object.image:
             storage.delete(self.object.image.name)
         success_url = self.get_success_url()
