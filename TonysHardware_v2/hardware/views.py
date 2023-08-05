@@ -68,8 +68,7 @@ class HardwareDeleteView(gen_views.DeleteView):
         return super().get_object(queryset)
 
     def get_success_url(self):
-        pk = self.kwargs.get(self.pk_url_kwarg)
-        return reverse_lazy('list_hardware', kwargs={'model': self.request.resolver_match.kwargs.get('model', None), 'pk': pk})
+        return reverse_lazy('list_hardware', kwargs={'model': self.request.resolver_match.kwargs.get('model', None)})
 
     def post(self, request, *args, **kwargs):
         storage = S3Boto3Storage()
