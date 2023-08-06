@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    {% block head %}
+        <link rel="stylesheet" type="text/css" href="{% static 'common/about.css' %}">
+        <title>About Us</title>
+    {% endblock %}
+
+<div class="about-section">
+  <h1>About Us Page</h1>
+  <p>Some text about who we are and what we do.</p>
+  <p>Resize the browser window to see that this page is responsive by the way.</p>
+</div>
+
+<h2 style="text-align:center">Our Team</h2>
+    <div class="row">
+      <div class="column">
+        <div class="card">
+          <img src="" alt="Tony" style="width:100%">
+          <div class="container">
+            <h2>Antonio Peres</h2>
+            <p class="title"></p>
+            <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+            <p>jane@example.com</p>
+            <p><button class="button">Contact</button></p>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

@@ -19,3 +19,7 @@ class ContactFormSubmissionView(gen_views.CreateView):
 
 class ContactFormSubmissionSuccessView(gen_views.TemplateView):
     template_name = 'common/contact_form_submission_success.html'
+
+
+class AboutPageView(gen_views.TemplateView):
+    template_name = 'common/about.html'
