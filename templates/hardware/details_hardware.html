@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block title %}Add component{% endblock %}
 {% block content %}
-    {% for field in component %}
-    {{ field }}
+    {% for field in component|get_object_fields_and_values %}
+        <ul>
+             {{ field.name }}: {{ field.value }}
+        </ul>
     {% endfor %}
     <button>
         <a href="{% url 'delete_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
