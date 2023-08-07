@@ -92,8 +92,14 @@ html, body {
 
 .content {
   background-image: url('/static/local_media_files/tonys_hardware_background_image.png');
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  overflow: auto;
   margin: 0;
   padding: 0;
 }
@@ -113,6 +119,7 @@ html, body {
   align-items: center;
   background-color: #6e0f15;
   font-style: normal;
+  font-size: 25px;
 }
 
 .navbar a {

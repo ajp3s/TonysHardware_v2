@@ -49,6 +49,12 @@ class RAMMemory(models.Model):
         max_length=100,
     )
 
+    release_price = models.CharField(
+        max_length=4,
+        default=0,
+
+    )
+
     image = models.ImageField(
         upload_to='ram_images/'
     )
@@ -97,6 +103,11 @@ class Cpu(models.Model):
     tdp = models.PositiveIntegerField(
         verbose_name="Thermal Design Power(TDP)",
 
+    )
+
+    release_price = models.CharField(
+        max_length=4,
+        default=0,
     )
 
     image = models.ImageField(
@@ -157,6 +168,12 @@ class StorageDrive(models.Model):
 
     capacity = models.CharField(
         max_length=50,
+    )
+
+    release_price = models.CharField(
+        max_length=4,
+        default=0,
+
     )
 
     image = models.ImageField(
@@ -249,9 +266,15 @@ class Psu(models.Model):
         null=True,
     )
 
-    connectors = models.TextField(
+    connectors = models.CharField(
         max_length=200,
         null=True,
+    )
+
+    release_price = models.CharField(
+        max_length=4,
+        default=0,
+
     )
 
     image = models.ImageField(

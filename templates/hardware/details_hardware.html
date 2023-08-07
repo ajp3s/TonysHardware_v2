@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Add component{% endblock %}
 {% block content %}
-    {{ component }}
-
+    {% for field in component %}
+    {{ field }}
+    {% endfor %}
     <button>
         <a href="{% url 'delete_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
             Delete

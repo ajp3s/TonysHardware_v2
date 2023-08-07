@@ -13,7 +13,7 @@
 <div class="container">
     <nav class="navbar">
         <a href="{% url 'home page' %}">
-        <img src="{%  static 'local_media_files/homepage_icon.png' %}" style="width: 35px; height: 22px;" alt="">
+        <img src="{%  static 'local_media_files/homepage_icon.png' %}" style="width: 40px; height: 26px; margin-top: 8px" alt="">
             Home
         </a>
          <a href="{% url 'list_hardware' model='AMDRadeonGPU' %}">
@@ -33,7 +33,7 @@
             RAM
         </a>
          <a href="{% url 'list_hardware' model='MotherBoard' %}">
-        <img src="{% static 'local_media_files/motherboard_image.png' %}" alt="">
+        <img src="{% static 'local_media_files/motherboard_image.png' %}" style="height: 44px; margin-bottom: 4px" alt="">
             Motherboards
         </a>
          <a href="{% url 'list_hardware' model='StorageDrive' %}">
@@ -55,7 +55,7 @@
         </a>
          {% else %}
          <a href="{% url 'register' %}">
-        <img src="{% static 'local_media_files/register_icon.png' %}" style="width: 30px; height: 22px;" alt="">
+        <img src="{% static 'local_media_files/register_icon.png' %}" style="width: 30px; height: 30px; margin-top: 5px" alt="">
             Register
         </a>
          <a href="{% url 'login' %}">

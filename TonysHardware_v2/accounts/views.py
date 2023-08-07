@@ -9,17 +9,10 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
     UploadImageForm
+from TonysHardware_v2.accounts.mixins import ValidateAccountOwnerMixin
 from TonysHardware_v2.accounts.models import ImageGalleryModel
 
 BasicUserModel = get_user_model()
-
-
-class ValidateAccountOwnerMixin:
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user == self.get_object().user:
-            return super().dispatch(request, *args, **kwargs)
-        else:
-            return redirect(reverse('unauthorized'))
 
 
 class UserCreationView(gen_views.CreateView):
