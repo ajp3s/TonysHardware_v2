@@ -19,7 +19,7 @@ PC builds and share their knowledge and experiences.
 
 ## Screenshots
 
-![Home Page](screenshots/Screenshot%20(12).png)
+![Home Page](screenshots/Screenshot%20(15).png)
 
 ## Features
 

@@ -56,6 +56,11 @@ class HardwareDetailView(gen_views.DetailView):
             pk = self.kwargs.get(self.pk_url_kwarg)
             return model.objects.get(pk=pk)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['excluded_fields'] = ['id', 'image']
+        return context
+
 
 class HardwareDeleteView(gen_views.DeleteView):
     template_name = 'hardware/delete_hardware.html'

@@ -1,78 +1,27 @@
-/*html, body {*/
-/*  height: 100%;*/
-/*  margin: 0;*/
-/*  padding: 0;*/
-/*}*/
-
-/*.container {*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  min-height: 100vh;*/
-/*}*/
-
-/*.header {*/
-/*  position: relative;*/
-/*  background-size: cover;*/
-/*  background-repeat: no-repeat;*/
-/*  background-position: center center;*/
-/*  height: 300px;*/
-/*}*/
-
-/*.content {*/
-/*  background-image: url('/static/local_media_files/tonys_hardware_background_image.png');*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  margin: 0;*/
-/*  padding: 0;*/
-/*  min-height: 90vh;*/
-/*}*/
-
-/*.footer {*/
-/*    background-color: black;*/
-/*  background-size: cover;*/
-/*  background-repeat: no-repeat;*/
-/*  background-position: center center;*/
-/*  position: absolute;*/
-/*  bottom: 0;*/
-/*  width: 100%;*/
-/*  height: 60px;*/
-/*}*/
-
-/*.navbar {*/
-/*  position: absolute;*/
-/*  top: 0;*/
-/*  left: 0;*/
-/*  width: 100%;*/
-/*  display: flex;*/
-/*  justify-content: space-around;*/
-/*  align-items: center;*/
-/*  background-color: #6e0f15;*/
-/*  font-style: normal;*/
-/*}*/
-
-/*.navbar a {*/
-/*  display: flex;*/
-/*  flex-direction: row-reverse;*/
-/*  align-items: center;*/
-/*  text-decoration: none;*/
-/*  color: #000000;*/
-/*}*/
-
-/*.navbar a img {*/
-/*  width: 80px;*/
-/*  height: 50px;*/
-/*  margin-bottom: 1px;*/
-/*}*/
-
-/*.navbar a:hover {*/
-/*  color: #ffffff;*/
-/*}*/
-
-
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+h1 {
+  margin-top: 0;
+  margin-left: 20px;
+  margin-bottom: 5px;
+  padding-top: 8px;
+}
+
+img {
+  height: 200px;
+  width: 200px;
+
+}
+
+header {
+  margin-top: 0;
+  padding: 0;
+  height: 100px;
+  background-color: black;
 }
 
 .container {
@@ -80,14 +29,6 @@ html, body {
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
 
-}
-
-.header {
-  position: relative;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  height: 300px;
 }
 
 .content {
@@ -104,20 +45,36 @@ html, body {
   padding: 0;
 }
 
+.content-block {
+  max-width: 100%;
+  background-color: rgb(1, 115, 1);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow:
+    rgba(0, 0, 0, 0.17) 0 -23px 25px 0 inset,
+    rgba(0, 0, 0, 0.15) 0 -36px 30px 0 inset,
+    rgba(0, 0, 0, 0.1) 0 -79px 40px 0 inset,
+    rgba(0, 0, 0, 0.06) 0 2px 1px,
+    rgba(0, 0, 0, 0.09) 0 4px 2px,
+    rgba(0, 0, 0, 0.09) 0 8px 4px,
+    rgba(0, 0, 0, 0.09) 0 16px 8px,
+    rgba(0, 0, 0, 0.09) 0 32px 16px;
+}
+
+
 .footer {
-  background-color: black;
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
+  background: linear-gradient(to bottom,#034205, #6e0f15) no-repeat center center;
   width: 100%;
   height: 60px;
+  grid-column: 1 / -1;
 }
 
 .navbar {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #6e0f15;
+  background: linear-gradient(to bottom, #6e0f15, #045d06);
   font-style: normal;
   font-size: 25px;
 }
@@ -137,7 +94,8 @@ html, body {
   color: #ffffff;
 }
 
-.header,
-.footer {
-  grid-column: 1 / -1;
+.form-container label,
+.form-container input {
+  display: block;
+  margin-bottom: 10px;
 }

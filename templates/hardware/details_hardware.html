@@ -2,10 +2,13 @@
 {% load custom_filters %}
 {% block title %}Add component{% endblock %}
 {% block content %}
+    <img src="{{ component.image.url }}" alt="Component image">
     {% for field in component|get_object_fields_and_values %}
+        {% if field.name not in excluded_fields %}
         <ul>
              {{ field.name }}: {{ field.value }}
         </ul>
+        {% endif %}
     {% endfor %}
     <button>
         <a href="{% url 'delete_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
