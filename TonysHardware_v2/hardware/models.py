@@ -2,6 +2,13 @@ from django.db import models
 from django.db.models import CASCADE
 from storages.backends.s3boto3 import S3Boto3Storage
 
+DDR_RAM_TYPES_CHOICES = (
+    ("DDR2", "DDR2"),
+    ("DDR3", "DDR3"),
+    ("DDR4", "DDR4"),
+    ("DDR5", "DDR5"),
+)
+
 
 class RAMMemory(models.Model):
     MANUFACTURER_CHOICES = {
@@ -24,13 +31,6 @@ class RAMMemory(models.Model):
         ('Qimonda', 'Qimonda'),
     }
 
-    DDR_RAM_TYPES = (
-        ("DDR2", "DDR2"),
-        ("DDR3", "DDR3"),
-        ("DDR4", "DDR4"),
-        ("DDR5", "DDR5"),
-    )
-
     brand = models.CharField(
         max_length=50,
         choices=MANUFACTURER_CHOICES,
@@ -42,7 +42,7 @@ class RAMMemory(models.Model):
 
     ram_type = models.CharField(
         max_length=10,
-        choices=DDR_RAM_TYPES,
+        choices=DDR_RAM_TYPES_CHOICES,
     )
 
     ram_frequency = models.CharField(
@@ -489,8 +489,33 @@ class AMDRadeonGPU(models.Model):
 
 
 class MotherBoardModel(models.Model):
-    # TODO
-    pass
+    manufacturer = models.CharField(
+        max_length=20,
+    )
+
+    socket = models.CharField(
+        max_length=10,
+    )
+
+    chipset = models.CharField(
+        max_length=10,
+    )
+
+    supported_cpus = models.ManyToManyField(Cpu)
+
+    ram_type = models.CharField(
+        max_length=5,
+        choices=DDR_RAM_TYPES_CHOICES
+    )
+
+    ram_slots_count = models.IntegerField()
+
+    ram_max_capacity = models.IntegerField()
+
+    ram_max_frequency = models.IntegerField()
+
+    
+
 #
 #
 # class IntelGPUModel(models.Model):
