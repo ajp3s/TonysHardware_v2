@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
 
     # My apps:
     'TonysHardware_v2.accounts',

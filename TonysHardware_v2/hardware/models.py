@@ -13,7 +13,7 @@ DDR_RAM_TYPES_CHOICES = (
 )
 
 
-class RAMMemory(S3ImageSaveMixin, models.Model):
+class RAMMemoryModel(S3ImageSaveMixin, models.Model):
     MANUFACTURER_CHOICES = {
         ('Corsair', 'Corsair'),
         ('Kingston', 'Kingston'),
@@ -66,7 +66,7 @@ class RAMMemory(S3ImageSaveMixin, models.Model):
         return f"{self.brand} {self.ram_type} {self.capacity}GB {self.ram_frequency}Mhz"
 
 
-class Cpu(S3ImageSaveMixin, models.Model):
+class CpuModel(S3ImageSaveMixin, models.Model):
     CPU_MANUFACTURERS_CHOICES = (
         ('Intel', "Intel"),
         ("AMD", "AMD"),
@@ -113,7 +113,7 @@ class Cpu(S3ImageSaveMixin, models.Model):
         return f'{self.image} {self.manufacturer} {self.model}'
 
 
-class StorageDrive(S3ImageSaveMixin, models.Model):
+class StorageDriveModel(S3ImageSaveMixin, models.Model):
     manufacturer_choices = (
         ('Adata', 'Adata'),
         ('Corsair', 'Corsair'),
@@ -171,7 +171,7 @@ class StorageDrive(S3ImageSaveMixin, models.Model):
         return f"{self.image} {self.type} {self.capacity}"
 
 
-class Psu(S3ImageSaveMixin, models.Model):
+class PsuModel(S3ImageSaveMixin, models.Model):
     manufacturer_choices = (
         ('ABS', 'ABS'),
         ('Antec', 'Antec'),
@@ -263,7 +263,7 @@ class Psu(S3ImageSaveMixin, models.Model):
         return f"{self.image} {self.manufacturer} {self.max_dc_output} {self.efficiency_standard} {self.modular}"
 
 
-class NvidiaGPU(S3ImageSaveMixin, models.Model):
+class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
     GENERATIONS_CHOICES = (
         ('Nvidia GeForce RTX', 'Nvidia GeForce RTX'),
         ('Nvidia GeForce GTX', 'Nvidia GeForce GTX'),
@@ -352,7 +352,7 @@ class NvidiaGPU(S3ImageSaveMixin, models.Model):
                 f' ')
 
 
-class AMDRadeonGPU(S3ImageSaveMixin, models.Model):
+class AMDRadeonGPUModel(S3ImageSaveMixin, models.Model):
     GENERATIONS_CHOICES = (
         ('Radeon RX', ' Radeon RX'),
         ('Radeon R9', 'Radeon R9'),
@@ -457,7 +457,7 @@ class MotherBoardModel(S3ImageSaveMixin, models.Model):
         max_length=10,
     )
 
-    supported_cpus = models.ManyToManyField(Cpu)
+    supported_cpus = models.ManyToManyField(CpuModel)
 
     ram_type = models.CharField(
         max_length=5,
