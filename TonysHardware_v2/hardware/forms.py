@@ -1,6 +1,6 @@
 from django import forms
 
-from TonysHardware_v2.hardware.utils import get_model_from_model_name
+from TonysHardware_v2.functionality.funcs import get_model_from_model_name
 
 
 class HardwareModelForm(forms.ModelForm):

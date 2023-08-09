@@ -9,7 +9,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
     UploadImageForm
-from TonysHardware_v2.accounts.mixins import ValidateAccountOwnerMixin
+from TonysHardware_v2.validators.custom_validators import ValidateAccountOwnerMixin
 from TonysHardware_v2.accounts.models import ImageGalleryModel
 
 BasicUserModel = get_user_model()

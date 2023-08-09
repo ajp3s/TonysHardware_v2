@@ -1,6 +1,9 @@
 from django.db import models
-from django.db.models import CASCADE
 from storages.backends.s3boto3 import S3Boto3Storage
+from TonysHardware_v2.functionality.mixins import S3ImageSaveMixin
+
+
+storage = S3Boto3Storage()
 
 DDR_RAM_TYPES_CHOICES = (
     ("DDR2", "DDR2"),
@@ -10,7 +13,7 @@ DDR_RAM_TYPES_CHOICES = (
 )
 
 
-class RAMMemory(models.Model):
+class RAMMemory(S3ImageSaveMixin, models.Model):
     MANUFACTURER_CHOICES = {
         ('Corsair', 'Corsair'),
         ('Kingston', 'Kingston'),
@@ -59,19 +62,11 @@ class RAMMemory(models.Model):
         upload_to='ram_images/'
     )
 
-    def save(self, *args, **kwargs):
-        storage = S3Boto3Storage()
-        if self.image:
-            self.image.name = self.image.name
-            self.image = storage.save(self.image.name, self.image)
-
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return f"{self.brand} {self.ram_type} {self.capacity}GB {self.ram_frequency}Mhz"
 
 
-class Cpu(models.Model):
+class Cpu(S3ImageSaveMixin, models.Model):
     CPU_MANUFACTURERS_CHOICES = (
         ('Intel', "Intel"),
         ("AMD", "AMD"),
@@ -114,19 +109,11 @@ class Cpu(models.Model):
         upload_to='cpu_images/'
     )
 
-    def save(self, *args, **kwargs):
-        storage = S3Boto3Storage()
-        if self.image:
-            self.image.name = self.image.name
-            self.image = storage.save(self.image.name, self.image)
-
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return f'{self.image} {self.manufacturer} {self.model}'
 
 
-class StorageDrive(models.Model):
+class StorageDrive(S3ImageSaveMixin, models.Model):
     manufacturer_choices = (
         ('Adata', 'Adata'),
         ('Corsair', 'Corsair'),
@@ -180,20 +167,11 @@ class StorageDrive(models.Model):
         upload_to='storage_drivers_images/'
     )
 
-    def save(self, *args, **kwargs):
-        storage = S3Boto3Storage()
-
-        if self.image:
-            self.image.name = self.image.name
-            self.image = storage.save(self.image.name, self.image)
-
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return f"{self.image} {self.type} {self.capacity}"
 
 
-class Psu(models.Model):
+class Psu(S3ImageSaveMixin, models.Model):
     manufacturer_choices = (
         ('ABS', 'ABS'),
         ('Antec', 'Antec'),
@@ -281,20 +259,11 @@ class Psu(models.Model):
         upload_to='psu_images/'
     )
 
-    def save(self, *args, **kwargs):
-
-        storage = S3Boto3Storage()
-        if self.image:
-            self.image = self.image.name
-            self.image = storage.save(self.image.name, self.image)
-
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return f"{self.image} {self.manufacturer} {self.max_dc_output} {self.efficiency_standard} {self.modular}"
 
 
-class NvidiaGPU(models.Model):
+class NvidiaGPU(S3ImageSaveMixin, models.Model):
     GENERATIONS_CHOICES = (
         ('Nvidia GeForce RTX', 'Nvidia GeForce RTX'),
         ('Nvidia GeForce GTX', 'Nvidia GeForce GTX'),
@@ -378,19 +347,12 @@ class NvidiaGPU(models.Model):
         null=True
     )
 
-    def save(self, *args, **kwargs):
-        storage = S3Boto3Storage()
-        if self.image:
-            self.image = self.image.name
-            self.image = storage.save(self.image.name, self.image)
-
-        super().save(*args, **kwargs)
-
     def __str__(self):
-        return f'{self.image} '
+        return (f'{self.image}\n'
+                f' ')
 
 
-class AMDRadeonGPU(models.Model):
+class AMDRadeonGPU(S3ImageSaveMixin, models.Model):
     GENERATIONS_CHOICES = (
         ('Radeon RX', ' Radeon RX'),
         ('Radeon R9', 'Radeon R9'),
@@ -479,25 +441,19 @@ class AMDRadeonGPU(models.Model):
         null=True
     )
 
-    def save(self, *args, **kwargs):
-        storage = S3Boto3Storage()
-        if self.image:
-            self.image = self.image.name
-            self.image = storage.save(self.image.name, self.image)
 
-        super().save(*args, **kwargs)
-
-
-class MotherBoardModel(models.Model):
-    manufacturer = models.CharField(
-        max_length=20,
-    )
-
-    socket = models.CharField(
-        max_length=10,
+class MotherBoardModel(S3ImageSaveMixin, models.Model):
+    model = models.CharField(
+        max_length=50,
+        null=False,
+        blank=False
     )
 
     chipset = models.CharField(
+        max_length=10,
+    )
+
+    socket = models.CharField(
         max_length=10,
     )
 
@@ -514,9 +470,25 @@ class MotherBoardModel(models.Model):
 
     ram_max_frequency = models.IntegerField()
 
+    PCIe_gen_support = models.CharField(
+        max_length=20,
+        null=False,
+        blank=False,
+    )
     
+    slots_and_connectors = models.TextField(
+        max_length=200,
+        null=False,
+        blank=False,
+    )
 
-#
+    IO_connectors = models.TextField(
+        max_length=200,
+        null=False,
+        blank=False,
+    )
+
+
 #
 # class IntelGPUModel(models.Model):
 #     # TODO

@@ -1,11 +1,10 @@
-from django import forms
 from django.forms import modelform_factory
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
 from storages.backends.s3boto3 import S3Boto3Storage
 
-from .utils import get_model_from_model_name, create_modelform
+from TonysHardware_v2.functionality.funcs import get_model_from_model_name, create_modelform
 
 
 class HardwareAddView(gen_views.CreateView):
@@ -39,7 +38,6 @@ class HardwareUpdateView(gen_views.UpdateView):
             return model.objects.get(pk=pk)
 
     def get_success_url(self):
-        pk = self.kwargs.get(self.pk_url_kwarg)
         return reverse_lazy('details_hardware', kwargs={'model': self.get_model(), 'pk': self.object.pk})
 
 
