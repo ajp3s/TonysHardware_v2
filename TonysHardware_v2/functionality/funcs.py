@@ -1,14 +1,14 @@
 from django import forms
-from TonysHardware_v2.hardware.models import RAMMemory, Cpu, StorageDrive, Psu, NvidiaGPU, AMDRadeonGPU, MotherBoardModel
+from TonysHardware_v2.hardware.models import RAMMemoryModel, CpuModel, StorageDriveModel, PsuModel, NvidiaGPUModel, AMDRadeonGPUModel, MotherBoardModel
 
 
 MODELS = {
-    'RAMMemory': RAMMemory,
-    'Cpu': Cpu,
-    'StorageDrive': StorageDrive,
-    'Psu': Psu,
-    'NvidiaGPU': NvidiaGPU,
-    'AMDRadeonGPU': AMDRadeonGPU,
+    'RAMMemory': RAMMemoryModel,
+    'Cpu': CpuModel,
+    'StorageDrive': StorageDriveModel,
+    'Psu': PsuModel,
+    'NvidiaGPU': NvidiaGPUModel,
+    'AMDRadeonGPU': AMDRadeonGPUModel,
     'MotherBoard': MotherBoardModel,
 
 }

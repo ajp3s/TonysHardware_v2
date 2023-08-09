@@ -2,10 +2,10 @@
 {% load static %}
 {% block title %} Register {% endblock %}
 {% block content %}
-    <form method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+    <form method="post" action="{% url 'register' %}" enctype="multipart/form-data" class="form-container">
         <input type="hidden" name="next" value="{{ next }}">
         {{ form.as_p }}
         {% csrf_token %}
-        <button type="submit">Register</button>
+        <button style="margin-top: 15px; width:80px; height: 30px" type="submit">Register</button>
     </form>
 {% endblock %}

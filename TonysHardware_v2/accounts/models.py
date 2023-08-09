@@ -1,4 +1,6 @@
 from django.contrib.auth.models import AbstractUser
+
+from TonysHardware_v2.functionality.mixins import S3ImageSaveMixin
 from TonysHardware_v2.validators.custom_validators import letters_numbers_and_underscores_validator
 from django.db import models
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -64,7 +66,7 @@ class BasicUser(AbstractUser):
         return self.get_full_name()
 
 
-class ImageGalleryModel(models.Model):
+class ImageGalleryModel(S3ImageSaveMixin,models.Model):
     user_profile = models.ForeignKey(
         BasicUser,
         on_delete=models.CASCADE,
@@ -75,11 +77,3 @@ class ImageGalleryModel(models.Model):
 
     )
 
-    def save(self, *args, **kwargs):
-        storage = S3Boto3Storage()
-
-        if self.image:
-            self.image.name = self.image.name
-            self.image = storage.save(self.image.name, self.image)
-
-        super().save(*args, **kwargs)

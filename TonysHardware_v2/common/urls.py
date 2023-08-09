@@ -8,5 +8,4 @@ urlpatterns = [
     path('contact/success', ContactFormSubmissionSuccessView.as_view(), name='contact_form_success'),
     path('about/', AboutPageView.as_view(), name='about')
 
-
 ]
