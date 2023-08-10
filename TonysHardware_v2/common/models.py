@@ -57,6 +57,11 @@ class ArticleModel(S3ImageSaveMixin, models.Model):
         blank=False,
 
     )
+
+    added_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
     source = models.CharField(
         max_length=50,
 

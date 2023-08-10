@@ -1,0 +1,14 @@
+.articles-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+    gap: 3.3%;
+    max-width: 100%; /* Set a maximum width for the container if desired */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.article-box {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    /* Additional styling for the article boxes */
+}
