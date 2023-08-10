@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model, login
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
@@ -10,7 +10,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
     UploadImageForm
 from TonysHardware_v2.validators.custom_validators import ValidateAccountOwnerMixin
-from TonysHardware_v2.accounts.models import ImageGalleryModel
+from TonysHardware_v2.accounts.models import UserImageGalleryModel
 
 BasicUserModel = get_user_model()
 
@@ -41,7 +41,7 @@ class UserCreationView(gen_views.CreateView):
             return reverse_lazy('profile_details', kwargs={'pk': self.object.pk})
 
 
-class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
+class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin, UserPassesTestMixin):
     model = BasicUserModel
     form_class = BasicUserEditProfileForm
     template_name = 'accounts/edit_profile.html'
@@ -98,7 +98,7 @@ class UserProfileDetailsView(gen_views.DetailView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        gallery = ImageGalleryModel.objects.filter(user_profile_id=self.request.user.pk)
+        gallery = UserImageGalleryModel.objects.filter(user_profile_id=self.request.user.pk)
         context['gallery'] = gallery
 
         return context
@@ -122,7 +122,7 @@ class UserLogoutView(LogoutView):
 
 
 class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
-    model = ImageGalleryModel
+    model = UserImageGalleryModel
     form_class = UploadImageForm
     template_name = 'accounts/upload_image.html'
 

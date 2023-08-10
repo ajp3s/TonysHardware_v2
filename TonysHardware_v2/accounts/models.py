@@ -66,7 +66,7 @@ class BasicUser(AbstractUser):
         return self.get_full_name()
 
 
-class ImageGalleryModel(S3ImageSaveMixin,models.Model):
+class UserImageGalleryModel(S3ImageSaveMixin, models.Model):
     user_profile = models.ForeignKey(
         BasicUser,
         on_delete=models.CASCADE,

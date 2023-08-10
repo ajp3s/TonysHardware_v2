@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.forms import models
 
-from TonysHardware_v2.accounts.models import ImageGalleryModel
+from TonysHardware_v2.accounts.models import UserImageGalleryModel
 
 BasicUserModel = get_user_model()
 
@@ -56,7 +56,7 @@ class BasicUserDeleteProfileForm(forms.ModelForm):
 
 class UploadImageForm(forms.ModelForm):
     class Meta:
-        model = ImageGalleryModel
+        model = UserImageGalleryModel
         fields = [
             'image',
         ]
