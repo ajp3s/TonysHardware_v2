@@ -26,3 +26,9 @@ class ValidateAccountOwnerMixin:
             return super().dispatch(request, *args, **kwargs)
         else:
             return redirect(reverse('access_denied'))
+
+
+class ValidateGroupMembershipMixin:
+    def is_member_of_group(self, group_name):
+        user_groups = self.request.user.groups.all()
+        return user_groups.filter(name=group_name).exists()

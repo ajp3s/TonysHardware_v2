@@ -4,7 +4,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
 from django.shortcuts import redirect
-from django.core.exceptions import PermissionDenied
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
@@ -15,7 +14,7 @@ from TonysHardware_v2.accounts.models import UserImageGalleryModel
 BasicUserModel = get_user_model()
 
 
-class UserCreationView(gen_views.CreateView):
+class UserCreateProfileView(gen_views.CreateView):
     model = BasicUserModel
     form_class = BasicUserRegisterForm
     template_name = 'accounts/register.html'
@@ -100,7 +99,7 @@ class UserProfileDetailsView(gen_views.DetailView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
         gallery = UserImageGalleryModel.objects.filter(user_profile_id=self.request.user.pk)
         context['gallery'] = gallery
-
+        context['is_owner'] = self.request.user.is_authenticated and self.request.user.username == self.get_object().username
         return context
 
 
@@ -132,6 +131,12 @@ class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountO
     def form_valid(self, form):
         form.instance.user_profile = self.request.user
         return super().form_valid(form)
+
+
+class UsersListView(gen_views.ListView, LoginRequiredMixin):
+    template_name = 'accounts/users_list.html'
+    model = BasicUserModel
+    context_object_name = 'users_list'
 
 
 class AccessDeniedView(gen_views.TemplateView):

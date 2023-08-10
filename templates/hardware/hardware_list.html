@@ -5,5 +5,7 @@
         <a href="{% url 'details_hardware' model=request.resolver_match.kwargs.model pk=element.pk %}"><img src="{{ element.image.url }}" alt="Picture" width="40px" height="40px"> {{ element }}</a>
     </li>
 {% endfor %}
-    <a href="{% url 'add_hardware' model=request.resolver_match.kwargs.model %}">add hardware</a>
+
+        <a href="{% url 'add_hardware' model=request.resolver_match.kwargs.model %}">add hardware</a>
+
 {% endblock %}

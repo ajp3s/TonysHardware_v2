@@ -35,16 +35,12 @@
                         <h2>Not a single image uploaded yet....</h2>
                     {% endif %}
                 </div>
-            <a href="{% url 'upload_image' pk=user.pk %}">Upload image</a>
-
-            <ul>
-                <li>
-                    <a href="{% url 'edit_profile' pk=user.pk %}"> Edit </a>
-                </li>
-                <li>
-                    <a href="{% url 'delete_profile' pk=user.pk %}"> Delete Profile </a>
-                </li>
-            </ul>
+            {% if is_owner %}
+                <a href="{% url 'upload_image' pk=user.pk %}"><button> Upload image </button></a>
+                <br><br><br>
+                <a href="{% url 'edit_profile' pk=user.pk %}"><button> Edit Profile </button></a>
+                <a href="{% url 'delete_profile' pk=user.pk %}"><button> Delete Profile </button></a>
+            {% endif %}
       </div>
     </div>
 

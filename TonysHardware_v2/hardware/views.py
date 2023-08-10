@@ -5,9 +5,10 @@ from django.views import generic as gen_views
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from TonysHardware_v2.functionality.funcs import get_model_from_model_name, create_modelform
+from TonysHardware_v2.validators.custom_validators import ValidateGroupMembershipMixin
 
 
-class HardwareAddView(gen_views.CreateView):
+class HardwareAddView(gen_views.CreateView, ValidateGroupMembershipMixin):
     template_name = 'hardware/add_hardware.html'
 
     def get_form_class(self):
@@ -21,15 +22,21 @@ class HardwareAddView(gen_views.CreateView):
     def get_success_url(self):
         return reverse_lazy('list_hardware', kwargs={'model': self.request.resolver_match.kwargs.get('model', None)})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_is_moderator'] = self.is_member_of_group('Moderators')
+        return context
 
-class HardwareUpdateView(gen_views.UpdateView):
+
+class HardwareUpdateView(gen_views.UpdateView, ValidateGroupMembershipMixin):
     template_name = 'hardware/edit_hardware.html'
 
     def get_model(self):
         return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_form(self, form_class=None):
-        return modelform_factory(self.get_model(), fields='__all__')
+        form = create_modelform(self.get_model())
+        return form
 
     def get_object(self, queryset=None):
         model = self.get_model()
@@ -40,8 +47,13 @@ class HardwareUpdateView(gen_views.UpdateView):
     def get_success_url(self):
         return reverse_lazy('details_hardware', kwargs={'model': self.get_model(), 'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_is_moderator'] = self.is_member_of_group('Moderators')
+        return context
 
-class HardwareDetailView(gen_views.DetailView):
+
+class HardwareDetailView(gen_views.DetailView, ValidateGroupMembershipMixin):
     template_name = 'hardware/details_hardware.html'
     context_object_name = 'component'
 
@@ -56,11 +68,12 @@ class HardwareDetailView(gen_views.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['user_is_moderator'] = self.is_member_of_group('Moderators')
         context['excluded_fields'] = ['id', 'image']
         return context
 
 
-class HardwareDeleteView(gen_views.DeleteView):
+class HardwareDeleteView(gen_views.DeleteView, ValidateGroupMembershipMixin):
     template_name = 'hardware/delete_hardware.html'
 
     def get_model(self):
@@ -84,8 +97,13 @@ class HardwareDeleteView(gen_views.DeleteView):
 
         return redirect(success_url)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_is_moderator'] = self.is_member_of_group('Moderators')
+        return context
 
-class HardwareListView(gen_views.ListView):
+
+class HardwareListView(gen_views.ListView, ValidateGroupMembershipMixin):
     context_object_name = 'list'
     template_name = 'hardware/hardware_list.html'
 
@@ -98,3 +116,8 @@ class HardwareListView(gen_views.ListView):
             return model.objects.all()
         else:
             raise ValueError("Invalid component selected.")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_is_moderator'] = self.is_member_of_group('Moderators')
+        return context
