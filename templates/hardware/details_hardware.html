@@ -15,4 +15,9 @@
             Delete
         </a>
     </button>
+    <button>
+        <a href="{% url 'edit_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
+            Edit
+        </a>
+    </button>
 {% endblock %}

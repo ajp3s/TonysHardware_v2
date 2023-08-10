@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block title %}Delete component{% endblock %}
 {% block content %}
+    <h1 style="text-align: center">Do you really want to delete this component?</h1>
+    <img src="{{ component.image.url }}" alt="Component image" style="display: block; margin: 0 auto;">
+        {% for field in component|get_object_fields_and_values %}
+            <h3 style="text-align: center">
+                 {{ field.name }}: {{ field.value }}
+            </h3>
+        {% endfor %}
     <form action="{% url 'delete_hardware' model=request.resolver_match.kwargs.model pk=object.pk %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <button type="submit">Save</button>
+    <button type="submit" style="display: block; margin: 0 auto;"> Delete </button>
     </form>
 {% endblock %}

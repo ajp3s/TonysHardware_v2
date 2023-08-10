@@ -36,7 +36,7 @@ class HardwareUpdateView(gen_views.UpdateView, ValidateGroupMembershipMixin):
 
     def get_form(self, form_class=None):
         form = create_modelform(self.get_model())
-        return form
+        return form(instance=self.get_object())
 
     def get_object(self, queryset=None):
         model = self.get_model()
@@ -50,6 +50,7 @@ class HardwareUpdateView(gen_views.UpdateView, ValidateGroupMembershipMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_is_moderator'] = self.is_member_of_group('Moderators')
+        context['form'] = self.get_form()
         return context
 
 
@@ -75,6 +76,7 @@ class HardwareDetailView(gen_views.DetailView, ValidateGroupMembershipMixin):
 
 class HardwareDeleteView(gen_views.DeleteView, ValidateGroupMembershipMixin):
     template_name = 'hardware/delete_hardware.html'
+    context_object_name = 'component'
 
     def get_model(self):
         return get_model_from_model_name(self.kwargs.get('model'))
