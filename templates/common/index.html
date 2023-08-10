@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} register page {% endblock %}
+
+{% block additional_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'common/index.css' %}">
+{% endblock %}
+
+{% block title %} Home Page {% endblock %}
 {% block content %}
     <div class="articles_container">
         {% if articles %}
+            {% for article in articles %}
             <div class="article_box">
-
+                <h3>{{ article.title }}</h3>
+                <img src="{{ article.image.url }}" alt="Picture">
+                <div class="article-content">
+                    <p>{{ article.content }}</p>
+                </div>
             </div>
+            {% endfor %}
         {% endif %}
+    {% if perms.common.add_articlemodel %}
+        <button>
+            <a href="{% url 'add_article' %}">Add article</a>
+        </button>
+    {% endif %}
     </div>
 {% endblock %}

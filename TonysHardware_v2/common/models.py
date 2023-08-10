@@ -52,7 +52,7 @@ class ArticleModel(S3ImageSaveMixin, models.Model):
     )
 
     content = models.TextField(
-        max_length=500,
+        max_length=15000,
         null=False,
         blank=False,
 

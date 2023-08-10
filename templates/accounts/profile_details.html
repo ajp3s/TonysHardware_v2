@@ -23,13 +23,17 @@
             <p>Email: {{ user.email }}</p>
             <p>Additional Information: {{ user.additional_information }}</p>
 
-            {% if gallery %}
-                {% for image in gallery %}
-                    <img src="{{ image.image.url }}" alt="Picture">
-                {% endfor %}
-            {% else %}
-                "You haven't uploaded any images.
-            {% endif %}
+                <div class="user_gallery">
+                    {% if gallery %}
+                        {% for image in gallery %}
+                            <img src="{{ image.image.url }}" alt="Picture">
+                        {% endfor %}
+
+                    {% else %}
+                        <h2>"You haven't uploaded any images.</h2>
+                    {% endif %}
+                </div>
+
             <ul>
                 <li>
                     <a href="{% url 'logout' pk=user.pk %}"> Logout </a>
