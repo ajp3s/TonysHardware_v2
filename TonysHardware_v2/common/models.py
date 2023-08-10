@@ -9,11 +9,6 @@ from TonysHardware_v2.functionality.mixins import S3ImageSaveMixin
 
 
 class ContactFormModel(models.Model):
-    username = models.CharField(
-        max_length=100,
-        null=False,
-        blank=False,
-    )
 
     email = models.EmailField(
         null=False,

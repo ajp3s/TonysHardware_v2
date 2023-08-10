@@ -19,10 +19,10 @@
             </div>
             {% endfor %}
         {% endif %}
-    {% if perms.common.add_articlemodel %}
-        <button>
-            <a href="{% url 'add_article' %}">Add article</a>
-        </button>
-    {% endif %}
+        {% if perms.common.add_articlemodel %}
+            <button>
+                <a href="{% url 'add_article' %}">Add article</a>
+            </button>
+        {% endif %}
     </div>
 {% endblock %}

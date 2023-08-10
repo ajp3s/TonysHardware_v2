@@ -25,4 +25,4 @@ class ValidateAccountOwnerMixin:
         if request.user.is_authenticated and request.user == self.get_object().user:
             return super().dispatch(request, *args, **kwargs)
         else:
-            return redirect(reverse('unauthorized'))
+            return redirect(reverse('access_denied'))

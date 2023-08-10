@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model, login
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.core.exceptions import PermissionDenied
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
@@ -41,7 +41,7 @@ class UserCreationView(gen_views.CreateView):
             return reverse_lazy('profile_details', kwargs={'pk': self.object.pk})
 
 
-class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin, UserPassesTestMixin):
+class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
     model = BasicUserModel
     form_class = BasicUserEditProfileForm
     template_name = 'accounts/edit_profile.html'
@@ -135,4 +135,4 @@ class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountO
 
 
 class AccessDeniedView(gen_views.TemplateView):
-    template_name = 'accounts/access_denied.html'
+    template_name = 'accounts/../../templates/access_denied.html'

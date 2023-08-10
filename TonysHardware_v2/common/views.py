@@ -6,8 +6,15 @@ from TonysHardware_v2.common.models import ContactFormModel, ArticleModel
 from TonysHardware_v2.functionality.funcs import create_modelform
 
 
-class HomePageView(gen_views.TemplateView):
+class ArticleListView(gen_views.ListView):
+    model = ArticleModel
+    context_object_name = 'articles'
     template_name = 'common/index.html'
+    ordering = ['added_at']
+
+
+class ArticleDetailView(gen_views.DetailView):
+    model = ArticleModel
 
 
 class ContactFormSubmissionView(gen_views.CreateView):
@@ -32,14 +39,5 @@ class ArticleAddView(gen_views.CreateView):
     success_url = reverse_lazy('home page')
 
 
-class ArticleListView(gen_views.ListView):
-    model = ArticleModel
-    context_object_name = 'articles'
-    template_name = 'common/article_list.html'
-    ordering = ['added_at']
-
-
-class ArticleDeleteView(gen_views.DeleteView):
-    model = ArticleModel
 
 
