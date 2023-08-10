@@ -12,6 +12,6 @@ urlpatterns = [
     path('delete/<int:pk>', UserDeleteProfileView.as_view(), name='delete_profile'),
     path('edit/<int:pk>', UserEditProfileView.as_view(), name='edit_profile'),
     path('details/<int:pk>/upload_image', UploadImageView.as_view(), name='upload_image'),
-    path('denied/', AccessDeniedView.as_view(), name='access_denied'),
+    path('access-denied/', AccessDeniedView.as_view(), name='access_denied'),
 
 ]
