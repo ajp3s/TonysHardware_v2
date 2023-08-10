@@ -22,30 +22,27 @@
             <p>Last Name: {{ user.last_name }}</p>
             <p>Email: {{ user.email }}</p>
             <p>Additional Information: {{ user.additional_information }}</p>
-
+                <h4>Images:</h4>
                 <div class="user_gallery">
                     {% if gallery %}
                         {% for image in gallery %}
+                            <a href="{{ image.image.url }}">
                             <img src="{{ image.image.url }}" alt="Picture">
+                            </a>
                         {% endfor %}
 
                     {% else %}
-                        <h2>"You haven't uploaded any images.</h2>
+                        <h2>Not a single image uploaded yet....</h2>
                     {% endif %}
                 </div>
+            <a href="{% url 'upload_image' pk=user.pk %}">Upload image</a>
 
             <ul>
-                <li>
-                    <a href="{% url 'logout' pk=user.pk %}"> Logout </a>
-                </li>
                 <li>
                     <a href="{% url 'edit_profile' pk=user.pk %}"> Edit </a>
                 </li>
                 <li>
                     <a href="{% url 'delete_profile' pk=user.pk %}"> Delete Profile </a>
-                </li>
-                <li>
-                    <a href="{% url 'upload_image' pk=user.pk %}">Upload image</a>
                 </li>
             </ul>
       </div>

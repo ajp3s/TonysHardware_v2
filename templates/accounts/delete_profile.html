@@ -1,20 +1,63 @@
 {% extends 'base.html' %}
-{% block title %} {% endblock title %}
+{% block title %}Delete Profile{% endblock title %}
+{% load static %}
+
+{#{% block content %}#}
+{#    {{ message }}#}
+{#    <form method="POST" action="{% url 'delete_profile' pk=user.pk %}" enctype="multipart/form-data">#}
+{#        {% if user.profile_picture %}#}
+{#            <img src="{{ user.profile_picture.url }}" alt="Profile Picture">#}
+{#        {% endif %}#}
+{#        {{ form.as_p }}#}
+{#        {% csrf_token %}#}
+{#    <button type="submit">Delete</button>#}
+{#    </form>#}
+{#    <br>#}
+{#    <a href="{% url 'profile_details' pk=user.pk %}">#}
+{#    <button type="submit">Back</button>#}
+{#    </a>#}
+{##}
+{##}
+{#{% endblock %}#}
+
+{% block additional_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/profile_details.css' %}">
+{% endblock %}
 
 {% block content %}
-    {{ message }}
-    <form method="POST" action="{% url 'delete_profile' pk=user.pk %}" enctype="multipart/form-data">
-        {% if user.profile_picture %}
+     {{ message }}
+    <div class="profile-details-container">
+      <div class="profile-picture">
+         {% if user.profile_picture %}
             <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
-        {% endif %}
-        {{ form.as_p }}
-        {% csrf_token %}
-    <button type="submit">Delete</button>
-    </form>
-    <br>
-    <a href="{% url 'profile_details' pk=user.pk %}">
-    <button type="submit">Back</button>
-    </a>
+         {% else %}
+            <img src="https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="None">
+         {% endif %}
+      </div>
+      <div class="profile-info">
+            <p>Username: {{ user.username }}</p>
+            <p>First Name: {{ user.first_name }}</p>
+            <p>Last Name: {{ user.last_name }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Additional Information: {{ user.additional_information }}</p>
+                <h4>Images:</h4>
+                <div class="user_gallery">
+                    {% if gallery %}
+                        {% for image in gallery %}
+                            <a href="{{ image.image.url }}">
+                            <img src="{{ image.image.url }}" alt="Picture">
+                            </a>
+                        {% endfor %}
 
+                    {% else %}
+                        <h2>Not a single image uploaded yet....</h2>
+                    {% endif %}
+                </div>
+      </div>
+    </div>
+    <form method="POST" action="{% url 'delete_profile' pk=user.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
 
 {% endblock %}
