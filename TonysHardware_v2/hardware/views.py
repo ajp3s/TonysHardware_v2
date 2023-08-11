@@ -36,6 +36,9 @@ class HardwareUpdateView(gen_views.UpdateView, ValidateGroupMembershipMixin):
 
     def get_form(self, form_class=None):
         form = create_modelform(self.get_model())
+        for field_name, field_value in form.fields.items():
+            field_value.null = False
+            field_value.blank = True
         return form(instance=self.get_object())
 
     def get_object(self, queryset=None):

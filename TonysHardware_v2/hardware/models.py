@@ -2,7 +2,6 @@ from django.db import models
 from storages.backends.s3boto3 import S3Boto3Storage
 from TonysHardware_v2.functionality.mixins import S3ImageSaveMixin
 
-
 storage = S3Boto3Storage()
 
 DDR_RAM_TYPES_CHOICES = (
@@ -264,35 +263,22 @@ class PsuModel(S3ImageSaveMixin, models.Model):
 
 
 class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
-    GENERATIONS_CHOICES = (
-        ('Nvidia GeForce RTX', 'Nvidia GeForce RTX'),
-        ('Nvidia GeForce GTX', 'Nvidia GeForce GTX'),
-        ('Nvidia RTX', 'Nvidia RTX'),
-        ('Nvidia T', 'Nvidia T'),
-        ('Nvidia L', 'Nvidia L'),
-    )
-
     TYPES_CHOICES = (
         ('Desktop', 'Desktop'),
         ('Laptop', 'Laptop'),
     )
+
     type = models.CharField(
         max_length=20,
         choices=TYPES_CHOICES
     )
 
-    generation = models.CharField(
-        max_length=20,
-        choices=GENERATIONS_CHOICES,
-        null=True,
-    )
-
-    series = models.CharField(
-        max_length=30,
-    )
-
     model = models.CharField(
         max_length=100,
+    )
+
+    ram_size = models.CharField(
+        max_length=5,
     )
 
     graphics_processor = models.CharField(
@@ -316,14 +302,12 @@ class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
 
     boost_clock = models.PositiveIntegerField()
 
-    memory_clock = models.PositiveIntegerField()
-
     memory_bus_width = models.PositiveIntegerField()
 
-    memory_bandwidth = models.PositiveIntegerField()
+    release_date = models.DateField()
 
-    release_date = models.DateField(
-        auto_now=True,
+    release_price = models.CharField(
+        max_length=6,
     )
 
     tdp = models.PositiveIntegerField(
@@ -331,11 +315,11 @@ class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
 
     )
     suggested_psu = models.CharField(
-        max_length=10,
+        max_length=5,
     )
 
     graphics_api_support = models.CharField(
-        max_length=60,
+        max_length=25,
     )
 
     image = models.ImageField(
@@ -343,17 +327,15 @@ class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
     )
 
     maximum_gpu_temperature = models.CharField(
-        max_length=5,
+        max_length=3,
         null=True
     )
 
     def __str__(self):
-        return (f'{self.image}\n'
-                f' ')
+        return f'Nvidia {self.model} / {self.ram_size} ({self.type if self.type == "Laptop" else ""}'
 
 
 class AMDRadeonGPUModel(S3ImageSaveMixin, models.Model):
-
     TYPES_CHOICES = (
         ('Desktop', 'Desktop'),
         ('Laptop', 'Laptop'),
@@ -463,7 +445,7 @@ class MotherBoardModel(S3ImageSaveMixin, models.Model):
         null=False,
         blank=False,
     )
-    
+
     slots_and_connectors = models.TextField(
         max_length=200,
         null=False,
@@ -475,7 +457,6 @@ class MotherBoardModel(S3ImageSaveMixin, models.Model):
         null=False,
         blank=False,
     )
-
 
 #
 # class IntelGPUModel(models.Model):
