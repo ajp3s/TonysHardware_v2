@@ -10,6 +10,7 @@
         </ul>
         {% endif %}
     {% endfor %}
+    {% if user_is_moderator %}
     <button>
         <a href="{% url 'delete_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
             Delete
@@ -20,4 +21,5 @@
             Edit
         </a>
     </button>
+    {% endif %}
 {% endblock %}

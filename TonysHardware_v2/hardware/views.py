@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.forms import modelform_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404, render
@@ -9,8 +10,11 @@ from TonysHardware_v2.functionality.funcs import get_model_from_model_name, crea
 from TonysHardware_v2.validators.custom_validators import ValidateGroupMembershipMixin
 
 
-class HardwareAddView(gen_views.CreateView, ValidateGroupMembershipMixin):
+class HardwareAddView(gen_views.CreateView, UserPassesTestMixin):
     template_name = 'hardware/add_hardware.html'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Moderators').exists()
 
     def get_form_class(self):
         model = self.get_model()
@@ -25,12 +29,15 @@ class HardwareAddView(gen_views.CreateView, ValidateGroupMembershipMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_is_moderator'] = self.is_member_of_group('Moderators')
+        context['user_is_moderator'] = self.test_func()
         return context
 
 
-class HardwareUpdateView(View):
+class HardwareUpdateView(View, UserPassesTestMixin):
     template_name = 'hardware/edit_hardware.html'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Moderators').exists()
 
     def get(self, request, model, pk):
         model_class = get_model_from_model_name(self.kwargs.get('model'))
@@ -43,6 +50,7 @@ class HardwareUpdateView(View):
             'form': form,
             'model': model,
             'pk': pk,
+            'user_is_moderator': self.test_func()
         }
 
         return render(request, self.template_name, context)
@@ -63,6 +71,7 @@ class HardwareUpdateView(View):
             'form': form,
             'model': model,
             'pk': pk,
+            'user_is_moderator': self.test_func()
         }
         return render(request, self.template_name, context)
 
@@ -87,9 +96,12 @@ class HardwareDetailView(gen_views.DetailView, ValidateGroupMembershipMixin):
         return context
 
 
-class HardwareDeleteView(gen_views.DeleteView, ValidateGroupMembershipMixin):
+class HardwareDeleteView(gen_views.DeleteView, UserPassesTestMixin):
     template_name = 'hardware/delete_hardware.html'
     context_object_name = 'component'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Moderators').exists()
 
     def get_model(self):
         return get_model_from_model_name(self.kwargs.get('model'))
@@ -114,7 +126,7 @@ class HardwareDeleteView(gen_views.DeleteView, ValidateGroupMembershipMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_is_moderator'] = self.is_member_of_group('Moderators')
+        context['user_is_moderator'] = self.test_func()
         return context
 
     def form_valid(self, form):

@@ -111,7 +111,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     ]
 
-LOGOUT_REDIRECT_URL = reverse_lazy('home page')
+LOGIN_URL = reverse_lazy('login')
+PERMISSION_DENIED_URL = reverse_lazy('access_denied')
 AUTH_USER_MODEL = 'accounts.BasicUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
