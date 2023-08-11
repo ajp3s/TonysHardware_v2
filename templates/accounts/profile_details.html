@@ -35,6 +35,8 @@
                         <h2>Not a single image uploaded yet....</h2>
                     {% endif %}
                 </div>
+            {% block upload %}
+            {% endblock %}
             {% if is_owner %}
                 <a href="{% url 'upload_image' pk=user.pk %}"><button> Upload image </button></a>
                 <br><br><br>

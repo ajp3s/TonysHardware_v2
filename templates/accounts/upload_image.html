@@ -1,7 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'accounts/profile_details.html' %}
 
-{% block content %}
-    {% include 'accounts/profile_details.html' %}
+{% block upload %}
 <form class="form-container" method="post" enctype="multipart/form-data" action="{% url 'upload_image' pk=user.pk %}">
     Upload image to gallery:
     {% csrf_token %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Access Denied.{% endblock %}
+{% block content %}
+<div style="text-align: center">
+    <h1>
+       Access Denied.
+    </h1>
+        <img src="{% static 'local_media_files/Access-denied.jpg' %}" alt="!" style="width: 100%; height: 50vh">
+    <h2>
+        You do not have permission to access this part of the website.
+    </h2>
+
+    <h2>
+        Please contact the administrator(s) to request access or report an error.
+    </h2>
+        <a href="{% url 'contact_form' %}"><button>Contact Us</button></a>
+</div>
+{% endblock %}

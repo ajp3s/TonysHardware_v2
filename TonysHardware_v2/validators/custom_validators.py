@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 import re
 
 from django.shortcuts import redirect
@@ -22,10 +22,10 @@ def letters_numbers_and_underscores_validator(value):
 
 class ValidateAccountOwnerMixin:
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user == self.get_object().user:
+        if request.user.is_authenticated and request.user.pk == self.get_object().pk:
             return super().dispatch(request, *args, **kwargs)
         else:
-            return redirect(reverse('access_denied'))
+            raise PermissionDenied
 
 
 class ValidateGroupMembershipMixin:

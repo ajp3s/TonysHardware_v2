@@ -2,12 +2,14 @@
 {% load static %}
 {% block content %}
 {% for user in users_list %}
-    <div class="list_element">
-        {% if user.profile_picture %}
-            <a href="{% url 'profile_details' pk=user.pk %}"><img src="{{ user.profile_picture.url }}" alt="Picture" > {{ user }}</a>
-        {% else %}
-            <a href="{% url 'profile_details' pk=user.pk %}">None {{ user }}</a>
-        {% endif %}
+    <div class="list">
+        <div class="list-item">
+            {% if user.profile_picture %}
+                <a href="{% url 'profile_details' pk=user.pk %}"><img src="{{ user.profile_picture.url }}" alt="Picture" > {{ user }}</a>
+            {% else %}
+                <a href="{% url 'profile_details' pk=user.pk %}">None {{ user }}</a>
+            {% endif %}
+        </div>
     </div>
 {% endfor %}
 {% endblock %}
