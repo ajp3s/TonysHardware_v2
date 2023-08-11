@@ -1,25 +1,35 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load custom_filters %}
 {% block title %}Add component{% endblock %}
+{% block additional_styles %}
+<link rel="stylesheet" href="{% static 'hardware/hadrware_details.css' %}">
+{% endblock %}
 {% block content %}
-    <img src="{{ component.image.url }}" alt="Component image">
-    {% for field in component|get_object_fields_and_values %}
-        {% if field.name not in excluded_fields %}
-        <ul>
-             {{ field.name }}: {{ field.value }}
-        </ul>
-        {% endif %}
-    {% endfor %}
-    {% if user_is_moderator %}
-    <button>
-        <a href="{% url 'delete_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
-            Delete
-        </a>
-    </button>
-    <button>
-        <a href="{% url 'edit_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
-            Edit
-        </a>
-    </button>
+    <div class="hardware-details-container">
+        <div class="component-image">
+            <img src="{{ component.image.url }}" alt="Component image">
+        </div>
+        <div>
+            {% for field in component|get_object_fields_and_values %}
+                {% if field.name not in excluded_fields %}
+                <div class="component-info">
+                    <h2>{{ field.name }}: {{ field.value }}</h2>
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% if user_is_moderator %}
+            <button>
+                <a href="{% url 'delete_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
+                    Delete
+                </a>
+            </button>
+            <button>
+                <a href="{% url 'edit_hardware' model=request.resolver_match.kwargs.model pk=component.pk %}">
+                    Edit
+                </a>
+            </button>
+        </div>
+    </div>
     {% endif %}
 {% endblock %}
