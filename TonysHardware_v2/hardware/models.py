@@ -353,26 +353,11 @@ class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
 
 
 class AMDRadeonGPUModel(S3ImageSaveMixin, models.Model):
-    GENERATIONS_CHOICES = (
-        ('Radeon RX', ' Radeon RX'),
-        ('Radeon R9', 'Radeon R9'),
-        ('Radeon R8', 'Radeon R8'),
-        ('Radeon R7', 'Radeon R7'),
-        ('Radeon R6', 'Radeon R6'),
-        ('Radeon R5', 'Radeon R5'),
-        ('Radeon R4', 'Radeon R4'),
-        ('Radeon R3', 'Radeon R3'),
-        ('Radeon R2', 'Radeon R2'),
-    )
 
     TYPES_CHOICES = (
         ('Desktop', 'Desktop'),
         ('Laptop', 'Laptop'),
         ('Integrated(iGPU)', 'Integrated(iGPU)'),
-    )
-    generation = models.CharField(
-        max_length=20,
-        choices=GENERATIONS_CHOICES,
     )
 
     type = models.CharField(
@@ -380,12 +365,12 @@ class AMDRadeonGPUModel(S3ImageSaveMixin, models.Model):
         choices=TYPES_CHOICES,
     )
 
-    series = models.CharField(
-        max_length=30,
-    )
-
     model = models.CharField(
         max_length=100,
+    )
+
+    ram_size = models.CharField(
+        max_length=50,
     )
 
     graphics_processor = models.CharField(
@@ -440,6 +425,9 @@ class AMDRadeonGPUModel(S3ImageSaveMixin, models.Model):
         max_length=5,
         null=True
     )
+
+    def __str__(self):
+        return f'AMDRadeon {self.model} / {self.ram_size} ({self.type if self.type == "Laptop" else ""})'
 
 
 class MotherBoardModel(S3ImageSaveMixin, models.Model):
