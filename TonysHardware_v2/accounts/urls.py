@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.urls import path
 
 from TonysHardware_v2.accounts.views import UserCreateProfileView, UserProfileDetailsView, UserLoginView, \
-    UserLogoutView, UserDeleteProfileView, UserEditProfileView, UploadImageView, AccessDeniedView
+    UserLogoutView, UserDeleteProfileView, UserEditProfileView, UploadImageView, AccessDeniedView, UsersListView
 
 urlpatterns = [
     path('register/', UserCreateProfileView.as_view(), name='register'),
@@ -13,5 +13,5 @@ urlpatterns = [
     path('edit/<int:pk>', UserEditProfileView.as_view(), name='edit_profile'),
     path('details/<int:pk>/upload_image', UploadImageView.as_view(), name='upload_image'),
     path('access-denied/', AccessDeniedView.as_view(), name='access_denied'),
-
+    path('users/', UsersListView.as_view(), name='users_list'),
 ]

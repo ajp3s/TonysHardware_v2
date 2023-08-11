@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 {% for element in list %}
-    <li>
-        <a href="{% url 'details_hardware' model=request.resolver_match.kwargs.model pk=element.pk %}"><img src="{{ element.image.url }}" alt="Picture" width="40px" height="40px"> {{ element }}</a>
-    </li>
+    <div class="list-item">
+        <a href="{% url 'details_hardware' model=request.resolver_match.kwargs.model pk=element.pk %}"><img src="{{ element.image.url }}" alt="Picture"> {{ element }}</a>
+    </div>
 {% endfor %}
 
         <a href="{% url 'add_hardware' model=request.resolver_match.kwargs.model %}">add hardware</a>
