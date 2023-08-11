@@ -58,7 +58,9 @@ class RAMMemoryModel(S3ImageSaveMixin, models.Model):
     )
 
     image = models.ImageField(
-        upload_to='ram_images/'
+        upload_to='ram_images/',
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -105,7 +107,9 @@ class CpuModel(S3ImageSaveMixin, models.Model):
     )
 
     image = models.ImageField(
-        upload_to='cpu_images/'
+        upload_to='cpu_images/',
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -163,7 +167,9 @@ class StorageDriveModel(S3ImageSaveMixin, models.Model):
     )
 
     image = models.ImageField(
-        upload_to='storage_drivers_images/'
+        upload_to='storage_drives_images/',
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -255,7 +261,9 @@ class PsuModel(S3ImageSaveMixin, models.Model):
     )
 
     image = models.ImageField(
-        upload_to='psu_images/'
+        upload_to='psu_images/',
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -323,7 +331,9 @@ class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
     )
 
     image = models.ImageField(
-        upload_to='nvidia_gpu_images/'
+        upload_to='nvidia_gpu_images/',
+        null=True,
+        blank=True,
     )
 
     maximum_gpu_temperature = models.CharField(
@@ -400,7 +410,9 @@ class AMDRadeonGPUModel(S3ImageSaveMixin, models.Model):
     )
 
     image = models.ImageField(
-        upload_to='nvidia_gpu_images/'
+        upload_to='nvidia_gpu_images/',
+        null=True,
+        blank=True,
     )
 
     maximum_gpu_temperature = models.CharField(
@@ -458,6 +470,11 @@ class MotherBoardModel(S3ImageSaveMixin, models.Model):
         blank=False,
     )
 
+    image = models.ImageField(
+        upload_to='motherboard_images',
+        null=True,
+        blank=True,
+    )
 #
 # class IntelGPUModel(models.Model):
 #     # TODO
