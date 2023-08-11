@@ -1,7 +1,8 @@
 from django.forms import modelform_factory
-from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views import generic as gen_views
+from django.views import generic as gen_views, View
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from TonysHardware_v2.functionality.funcs import get_model_from_model_name, create_modelform
@@ -28,30 +29,42 @@ class HardwareAddView(gen_views.CreateView, ValidateGroupMembershipMixin):
         return context
 
 
-class HardwareUpdateView(gen_views.UpdateView, ValidateGroupMembershipMixin):
+class HardwareUpdateView(View):
     template_name = 'hardware/edit_hardware.html'
 
-    def get_model(self):
-        return get_model_from_model_name(self.kwargs.get('model'))
+    def get(self, request, model, pk):
+        model_class = get_model_from_model_name(self.kwargs.get('model'))
 
-    def get_form(self, form_class=None):
-        form = create_modelform(self.get_model())
-        return form(instance=self.get_object())
+        ModelformClass = create_modelform(model_class)
+        instance = get_object_or_404(model_class, pk=self.kwargs.get('pk'))
+        form = ModelformClass(instance=instance)
 
-    def get_object(self, queryset=None):
-        model = self.get_model()
-        if model is not None:
-            pk = self.kwargs.get(self.pk_url_kwarg)
-            return model.objects.get(pk=pk)
+        context = {
+            'form': form,
+            'model': model,
+            'pk': pk,
+        }
 
-    def get_success_url(self):
-        return reverse_lazy('details_hardware', kwargs={'model': self.get_model(), 'pk': self.object.pk})
+        return render(request, self.template_name, context)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user_is_moderator'] = self.is_member_of_group('Moderators')
-        context['form'] = self.get_form()
-        return context
+    def post(self, request, model, pk):
+        model_class = get_model_from_model_name(self.request.resolver_match.kwargs.get('model'))
+
+        ModelformClass = create_modelform(model_class)
+        instance = get_object_or_404(model_class, pk=self.kwargs.get('pk'))
+        form = ModelformClass(request.POST, request.FILES, instance=instance)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse_lazy('details_hardware', kwargs={'model': self.request.resolver_match.
+                                                     kwargs.get('model'), 'pk': self.request.resolver_match.kwargs.get('pk')}))
+
+        context = {
+            'form': form,
+            'model': model,
+            'pk': pk,
+        }
+        return render(request, self.template_name, context)
 
 
 class HardwareDetailView(gen_views.DetailView, ValidateGroupMembershipMixin):
@@ -103,6 +116,18 @@ class HardwareDeleteView(gen_views.DeleteView, ValidateGroupMembershipMixin):
         context = super().get_context_data(**kwargs)
         context['user_is_moderator'] = self.is_member_of_group('Moderators')
         return context
+
+    def form_valid(self, form):
+        storage = S3Boto3Storage()
+        existing_instance = self.get_object()
+
+        if 'image' in form.changed_data:
+
+            image = existing_instance.image
+            if image:
+                storage.delete(image.name)
+
+        return super().form_valid(form)
 
 
 class HardwareListView(gen_views.ListView, ValidateGroupMembershipMixin):
