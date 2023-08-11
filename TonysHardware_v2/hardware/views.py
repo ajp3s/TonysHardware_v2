@@ -10,7 +10,7 @@ from TonysHardware_v2.functionality.funcs import get_model_from_model_name, crea
 from TonysHardware_v2.validators.custom_validators import ValidateGroupMembershipMixin
 
 
-class HardwareAddView(gen_views.CreateView, UserPassesTestMixin):
+class HardwareAddView(UserPassesTestMixin, gen_views.CreateView):
     template_name = 'hardware/add_hardware.html'
 
     def test_func(self):
@@ -33,7 +33,7 @@ class HardwareAddView(gen_views.CreateView, UserPassesTestMixin):
         return context
 
 
-class HardwareUpdateView(View, UserPassesTestMixin):
+class HardwareUpdateView(UserPassesTestMixin, View):
     template_name = 'hardware/edit_hardware.html'
 
     def test_func(self):
@@ -76,7 +76,7 @@ class HardwareUpdateView(View, UserPassesTestMixin):
         return render(request, self.template_name, context)
 
 
-class HardwareDetailView(gen_views.DetailView, ValidateGroupMembershipMixin):
+class HardwareDetailView(ValidateGroupMembershipMixin, gen_views.DetailView):
     template_name = 'hardware/details_hardware.html'
     context_object_name = 'component'
 
@@ -96,7 +96,7 @@ class HardwareDetailView(gen_views.DetailView, ValidateGroupMembershipMixin):
         return context
 
 
-class HardwareDeleteView(gen_views.DeleteView, UserPassesTestMixin):
+class HardwareDeleteView(UserPassesTestMixin, gen_views.DeleteView):
     template_name = 'hardware/delete_hardware.html'
     context_object_name = 'component'
 
@@ -142,7 +142,7 @@ class HardwareDeleteView(gen_views.DeleteView, UserPassesTestMixin):
         return super().form_valid(form)
 
 
-class HardwareListView(gen_views.ListView, ValidateGroupMembershipMixin):
+class HardwareListView(ValidateGroupMembershipMixin, gen_views.ListView):
     context_object_name = 'list'
     template_name = 'hardware/hardware_list.html'
 

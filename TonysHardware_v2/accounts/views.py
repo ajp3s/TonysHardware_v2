@@ -40,7 +40,7 @@ class UserCreateProfileView(gen_views.CreateView):
             return reverse_lazy('profile_details', kwargs={'pk': self.object.pk})
 
 
-class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
+class UserEditProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_views.UpdateView):
     model = BasicUserModel
     form_class = BasicUserEditProfileForm
     template_name = 'accounts/edit_profile.html'
@@ -67,7 +67,7 @@ class UserEditProfileView(gen_views.UpdateView, LoginRequiredMixin, ValidateAcco
         return super().form_valid(form)
 
 
-class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAccountOwnerMixin):
+class UserDeleteProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin,gen_views.DeleteView):
     model = BasicUserModel
     form_class = BasicUserDeleteProfileForm
     template_name = 'accounts/delete_profile.html'
@@ -90,7 +90,7 @@ class UserDeleteProfileView(gen_views.DeleteView, LoginRequiredMixin, ValidateAc
         return redirect(success_url)
 
 
-class UserProfileDetailsView(gen_views.DetailView, LoginRequiredMixin):
+class UserProfileDetailsView(LoginRequiredMixin, gen_views.DetailView):
     model = BasicUserModel
     template_name = 'accounts/profile_details.html'
     context_object_name = 'user'
@@ -120,7 +120,7 @@ class UserLogoutView(LogoutView):
     success_url = reverse_lazy('home page')
 
 
-class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountOwnerMixin):
+class UploadImageView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_views.CreateView):
     model = UserImageGalleryModel
     form_class = UploadImageForm
     template_name = 'accounts/upload_image.html'
@@ -133,11 +133,7 @@ class UploadImageView(gen_views.CreateView, LoginRequiredMixin, ValidateAccountO
         return super().form_valid(form)
 
 
-class UsersListView(gen_views.ListView, LoginRequiredMixin):
+class UsersListView(LoginRequiredMixin, gen_views.ListView):
     template_name = 'accounts/users_list.html'
     model = BasicUserModel
     context_object_name = 'users_list'
-
-
-class AccessDeniedView(gen_views.TemplateView):
-    template_name = 'accounts/../../templates/access_denied.html'

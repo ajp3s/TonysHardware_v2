@@ -63,7 +63,7 @@ class BasicUser(AbstractUser):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.get_full_name()
+        return self.username
 
 
 class UserImageGalleryModel(S3ImageSaveMixin, models.Model):

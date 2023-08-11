@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
 
@@ -32,11 +33,14 @@ class AboutPageView(gen_views.TemplateView):
     template_name = 'common/about.html'
 
 
-class ArticleAddView(gen_views.CreateView):
+class ArticleAddView(LoginRequiredMixin, UserPassesTestMixin, gen_views.CreateView):
     model = ArticleModel
     form_class = create_modelform(model)
     template_name = 'common/article_create.html'
     success_url = reverse_lazy('home page')
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Writers').exists()
 
 
 
