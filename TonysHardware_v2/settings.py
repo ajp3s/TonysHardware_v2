@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(' ')
 CSRF_TRUSTED_ORIGINS = [f"http://{h}"for h in os.environ.get('ALLOWED_HOSTS').split(' ')]
 
 INSTALLED_APPS = [
@@ -105,11 +105,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [BASE_DIR / 'static_files']
 
-STATIC_ROOT = os.environ.get('STATIC_ROOT', BASE_DIR / 'static')
+STATIC_ROOT = os.getenv('STATIC_ROOT')
 
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_REDIRECT_URL = reverse_lazy('home page')

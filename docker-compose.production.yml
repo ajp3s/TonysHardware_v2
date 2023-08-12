@@ -1,43 +1,11 @@
-#services:
-#  web:
-#    image: tonys_hardware
-#
-#    build: .
-#
-#    command: gunicorn --bind=0.0.0.0:8000 TonysHardware_v2.wsgi:application
-#
-#    ports:
-#      - 8000:8000
-#
-#    env_file:
-#      - .env
-#
-#    volumes:
-#      - /tmp/tonyshardware/static:/app/static_files
-#
-#  nginx:
-#    image: nginx
-#    ports:
-#      - "81:80"
-#      - "443:443"
-#    volumes:
-#      - /tmp/tonyshardware/static:/app/static
-#      - ./nginx/conf.d:/etc/nginx/conf.d
-#      - ./nginx/logs:/var/log/nginx
-#      - ./certbot/www:/var/www/certbot/:ro
-#      - ./certbot/conf/:/etc/nginx/ssl/:ro
-#    links:
-#      - web
-
 version: '3.4'
 
 services:
 
   web:
-#    image: minkov/for_deploy_demo
+    image: ajp3s/tonys-hardware
     build: .
     command: gunicorn --bind=0.0.0.0:8000 TonysHardware_v2.wsgi:application
-#    platform: linux/amd64
     ports:
       - "8000:8000"
     env_file:
@@ -51,7 +19,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /tmp/tonys_hardware/static:/home/app/static/
+      - /tmp/tonys_hardware/static:/home/app/web/staticfiles/
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/logs:/var/log/nginx
       - ./certbot/www:/var/www/certbot/:ro

@@ -32,7 +32,7 @@ header {
 }
 
 .content {
-  background-image: url('/static_files/local_media_files/tonys_hardware_background_image.png');
+  background-image: url('https://ajp3s-bucket-2.s3.eu-central-1.amazonaws.com/tonys_hardware_background_image.png');
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;

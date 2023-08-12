@@ -5,7 +5,7 @@
 <h1 style="text-align: center">
    404 Not Found.
 </h1>
-    <img src="{% static 'local_media_files/th_404_image.png' %}" alt="!" style="width: 100%">
+    <img src="{% static 'local_media_files/th_404_image.png' %}" alt="!" style="width: 100%; height: 65vh">
 <h2 style="text-align: center">
     We couldn't find what you were looking for.
 </h2>
@@ -13,5 +13,5 @@
 <h2 style="justify-content: center">
     If the problem persists,please contact the administrator(s) to report an error.
 </h2>
-    <a href="{% url 'contact_form' %}" style="text-align: center"><button>Contact Us</button></a>
+    <a href="{% url 'contact_form' %}" style="text-align: center"><button style="display: block; margin: 0 auto;">Contact Us</button></a>
 {% endblock %}
