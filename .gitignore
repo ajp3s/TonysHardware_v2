@@ -51,5 +51,4 @@ eagle.epf
 *.lck
 
 .env
-docker-compose.production.yml
-nginx
+
