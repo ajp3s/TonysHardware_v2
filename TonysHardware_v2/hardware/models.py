@@ -38,6 +38,11 @@ class RAMMemoryModel(S3ImageSaveMixin, models.Model):
         choices=MANUFACTURER_CHOICES,
     )
 
+    model = models.CharField(
+        max_length=20,
+
+    )
+
     capacity = models.PositiveIntegerField(
 
     )
@@ -62,7 +67,7 @@ class RAMMemoryModel(S3ImageSaveMixin, models.Model):
     )
 
     def __str__(self):
-        return f"{self.brand} {self.ram_type} {self.capacity}GB {self.ram_frequency}Mhz"
+        return f"{self.brand} {self.model} {self.ram_type} {self.capacity}GB {self.ram_frequency}Mhz"
 
 
 class CpuModel(S3ImageSaveMixin, models.Model):
