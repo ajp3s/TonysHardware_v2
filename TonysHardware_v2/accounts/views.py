@@ -67,7 +67,7 @@ class UserEditProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_vie
         return super().form_valid(form)
 
 
-class UserDeleteProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin,gen_views.DeleteView):
+class UserDeleteProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_views.DeleteView):
     model = BasicUserModel
     form_class = BasicUserDeleteProfileForm
     template_name = 'accounts/delete_profile.html'

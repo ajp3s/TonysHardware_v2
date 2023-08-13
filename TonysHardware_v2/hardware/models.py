@@ -78,15 +78,16 @@ class CpuModel(S3ImageSaveMixin, models.Model):
 
     manufacturer = models.CharField(
         max_length=50,
-        choices=CPU_MANUFACTURERS_CHOICES
+        choices=CPU_MANUFACTURERS_CHOICES,
+
     )
 
     model = models.CharField(
-        max_length=50,
+        max_length=100,
     )
 
     cores_count = models.CharField(
-        max_length=150,
+        max_length=5,
     )
 
     base_clock = models.PositiveIntegerField()
@@ -105,16 +106,15 @@ class CpuModel(S3ImageSaveMixin, models.Model):
     )
 
     release_price = models.CharField(
-        max_length=4,
-        default=0,
+        max_length=6,
     )
 
     image = models.ImageField(
-        upload_to='cpu_images/'
+        upload_to='cpu_images/',
     )
 
     def __str__(self):
-        return f'{self.image} {self.manufacturer} {self.model}'
+        return f'{self.manufacturer} {self.model} {self.cores_count}'
 
 
 class StorageDriveModel(S3ImageSaveMixin, models.Model):
@@ -162,9 +162,7 @@ class StorageDriveModel(S3ImageSaveMixin, models.Model):
     )
 
     release_price = models.CharField(
-        max_length=4,
-        default=0,
-
+        max_length=6,
     )
 
     image = models.ImageField(
@@ -178,6 +176,7 @@ class StorageDriveModel(S3ImageSaveMixin, models.Model):
 class PsuModel(S3ImageSaveMixin, models.Model):
     manufacturer_choices = (
         ('ABS', 'ABS'),
+        ('MSI', 'MSI'),
         ('Antec', 'Antec'),
         ('AOpen', 'AOpen'),
         ('Apevia', 'Apevia'),
@@ -254,7 +253,7 @@ class PsuModel(S3ImageSaveMixin, models.Model):
     )
 
     release_price = models.CharField(
-        max_length=4,
+        max_length=6,
         default=0,
 
     )
@@ -264,7 +263,7 @@ class PsuModel(S3ImageSaveMixin, models.Model):
     )
 
     def __str__(self):
-        return f"{self.image} {self.manufacturer} {self.max_dc_output} {self.efficiency_standard} {self.modular}"
+        return f"{self.manufacturer} {self.max_dc_output} {self.efficiency_standard} {self.modular}"
 
 
 class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
@@ -313,6 +312,7 @@ class NvidiaGPUModel(S3ImageSaveMixin, models.Model):
 
     release_price = models.CharField(
         max_length=6,
+        default=0,
     )
 
     tdp = models.PositiveIntegerField(
@@ -413,6 +413,11 @@ class AMDRadeonGPUModel(S3ImageSaveMixin, models.Model):
         null=True
     )
 
+    price = models.CharField(
+        max_length=6,
+        default=0,
+    )
+
     def __str__(self):
         return f'AMDRadeon {self.model} / {self.ram_size} ({self.type if self.type == "Laptop" else ""})'
 
@@ -435,7 +440,7 @@ class MotherBoardModel(S3ImageSaveMixin, models.Model):
     supported_cpus = models.ManyToManyField(CpuModel)
 
     ram_type = models.CharField(
-        max_length=5,
+        max_length=10,
         choices=DDR_RAM_TYPES_CHOICES
     )
 
@@ -446,21 +451,30 @@ class MotherBoardModel(S3ImageSaveMixin, models.Model):
     ram_max_frequency = models.IntegerField()
 
     PCIe_gen_support = models.CharField(
-        max_length=20,
+        max_length=100,
         null=False,
         blank=False,
     )
 
     slots_and_connectors = models.TextField(
-        max_length=200,
+        max_length=350,
         null=False,
         blank=False,
     )
 
     IO_connectors = models.TextField(
-        max_length=200,
+        max_length=350,
         null=False,
         blank=False,
+    )
+
+    image = models.ImageField(
+        upload_to='motherboard_images/',
+    )
+
+    price = models.CharField(
+        max_length=5,
+        default=0,
     )
 
 #
