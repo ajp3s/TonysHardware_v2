@@ -1,28 +1,42 @@
 version: '3.4'
 
 services:
+    web:
+      build: .
+      platform: linux/amd64
+      command: gunicorn --bind=0.0.0.0:8000 TonysHardware_v2.wsgi:application
+      ports:
+        - "8000:8000"
+      env_file:
+        - .env
+      volumes:
+        - /tmp/tonys_hardware/static:/app/static
+      links:
+        - postgres
 
-  web:
-    image: ajp3s/tonys-hardware
-    build: .
-    command: gunicorn --bind=0.0.0.0:8000 TonysHardware_v2.wsgi:application
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    volumes:
-      - /tmp/tonys_hardware/static:/app/static
+    postgres:
+      image: postgres
+      restart: always
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_PASSWORD: Uniquepassword9009
+        POSTGRES_USER: Tony
+        POSTGRES_DB: tonys_hardware_db
+        PGDATA: /var/lib/postgresql/data/pgdata
+      volumes:
+        - ./postgresql:/var/lib/postgresql/data
 
-  nginx:
-    image: nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /tmp/tonys_hardware/static:/home/app/web/staticfiles/
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/logs:/var/log/nginx
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
-    links:
-      - web
+    nginx:
+      image: nginx
+      ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - /tmp/tonys_hardware/static:/home/app/web/staticfiles/
+        - ./nginx/conf.d:/etc/nginx/conf.d
+        - ./nginx/logs:/var/log/nginx
+        - ./certbot/www:/var/www/certbot/:ro
+        - ./certbot/conf/:/etc/nginx/ssl/:ro
+      links:
+        - web

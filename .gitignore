@@ -51,4 +51,4 @@ eagle.epf
 *.lck
 
 .env
-static_files
+
