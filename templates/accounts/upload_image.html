@@ -1,10 +1,45 @@
-{% extends 'accounts/profile_details.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block upload %}
-<form class="form-container" method="post" enctype="multipart/form-data" action="{% url 'upload_image' pk=user.pk %}">
-    Upload image to gallery:
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+{% block title %}Profile Details{% endblock %}
+
+{% block additional_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/profile_details.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="profile-details-container">
+      <div class="profile-picture">
+         {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+         {% else %}
+            <img src="https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="None">
+         {% endif %}
+      </div>
+      <div class="profile-info">
+            <p>Username: {{ user.username }}</p>
+            <p>First Name: {{ user.first_name }}</p>
+            <p>Last Name: {{ user.last_name }}</p>
+            <p>Email: {{ user.email }}</p>
+            {% if user.additional_information %}
+                <p>Additional Information: {{ user.additional_information }}</p>
+            {% endif %}
+            <form class="form-container" method="post" enctype="multipart/form-data" action="{% url 'upload_image' pk=request.user.pk %}">
+                Upload image to gallery:
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+            {% block upload %}
+            {% endblock %}
+            {% if is_owner %}
+                <a href="{% url 'upload_image' pk=user.pk %}"><button> Upload image </button></a>
+                <br><br><br>
+                <a href="{% url 'edit_profile' pk=user.pk %}"><button> Edit Profile </button></a>
+                <a href="{% url 'delete_profile' pk=user.pk %}"><button> Delete Profile </button></a>
+            {% endif %}
+      </div>
+    </div>
+
 {% endblock %}

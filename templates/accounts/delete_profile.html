@@ -39,7 +39,9 @@
             <p>First Name: {{ user.first_name }}</p>
             <p>Last Name: {{ user.last_name }}</p>
             <p>Email: {{ user.email }}</p>
-            <p>Additional Information: {{ user.additional_information }}</p>
+            {% if user.additional_information %}
+                <p>Additional Information: {{ user.additional_information }}</p>
+            {% endif %}
                 <h4>Images:</h4>
                 <div class="user_gallery">
                     {% if gallery %}
@@ -57,7 +59,7 @@
     </div>
     <form method="POST" action="{% url 'delete_profile' pk=user.pk %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <button type="submit">Delete</button>
+        <button type="submit" style="display: block; margin: 0 auto;">Delete</button>
     </form>
 
 {% endblock %}
