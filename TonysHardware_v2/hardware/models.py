@@ -40,7 +40,6 @@ class RAMMemoryModel(S3ImageSaveMixin, models.Model):
 
     model = models.CharField(
         max_length=20,
-
     )
 
     capacity = models.PositiveIntegerField(
@@ -71,6 +70,7 @@ class RAMMemoryModel(S3ImageSaveMixin, models.Model):
 
 
 class CpuModel(S3ImageSaveMixin, models.Model):
+
     CPU_MANUFACTURERS_CHOICES = (
         ('Intel', "Intel"),
         ("AMD", "AMD"),

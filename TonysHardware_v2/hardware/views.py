@@ -64,14 +64,20 @@ class HardwareUpdateView(UserPassesTestMixin, View):
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse_lazy('details_hardware', kwargs={'model': self.request.resolver_match.
-                                                     kwargs.get('model'), 'pk': self.request.resolver_match.kwargs.get('pk')}))
+
+            return HttpResponseRedirect(
+                reverse_lazy('details_hardware', kwargs={
+                    'model': self.request.resolver_match.kwargs.get('model'),
+                    'pk': self.request.resolver_match.kwargs.get('pk')
+                })
+            )
 
         context = {
             'form': form,
             'model': model,
             'pk': pk,
             'user_is_moderator': self.test_func()
+
         }
         return render(request, self.template_name, context)
 
@@ -85,14 +91,18 @@ class HardwareDetailView(ValidateGroupMembershipMixin, gen_views.DetailView):
 
     def get_object(self, queryset=None):
         model = self.get_model()
+
         if model is not None:
             pk = self.kwargs.get(self.pk_url_kwarg)
+
             return model.objects.get(pk=pk)
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         context['user_is_moderator'] = self.is_member_of_group('Moderators')
         context['excluded_fields'] = ['id', 'image']
+
         return context
 
 
@@ -101,12 +111,15 @@ class HardwareDeleteView(UserPassesTestMixin, gen_views.DeleteView):
     context_object_name = 'component'
 
     def test_func(self):
+
         return self.request.user.groups.filter(name='Moderators').exists()
 
     def get_model(self):
+
         return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_object(self, queryset=None):
+
         self.model = self.get_model()
         return super().get_object(queryset)
 
@@ -114,22 +127,28 @@ class HardwareDeleteView(UserPassesTestMixin, gen_views.DeleteView):
         return reverse_lazy('list_hardware', kwargs={'model': self.request.resolver_match.kwargs.get('model', None)})
 
     def post(self, request, *args, **kwargs):
+
         storage = S3Boto3Storage()
         self.object = self.get_object()
 
         if self.object.image:
             storage.delete(self.object.image.name)
+
         success_url = self.get_success_url()
+
         self.object.delete()
 
         return redirect(success_url)
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         context['user_is_moderator'] = self.test_func()
+
         return context
 
     def form_valid(self, form):
+
         storage = S3Boto3Storage()
         existing_instance = self.get_object()
 
@@ -150,13 +169,18 @@ class HardwareListView(ValidateGroupMembershipMixin, gen_views.ListView):
         return get_model_from_model_name(self.kwargs.get('model'))
 
     def get_queryset(self):
+
         model = get_model_from_model_name(self.kwargs.get('model'))
+
         if model:
             return model.objects.all()
+
         else:
             raise ValueError("Invalid component selected.")
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         context['user_is_moderator'] = self.is_member_of_group('Moderators')
+
         return context

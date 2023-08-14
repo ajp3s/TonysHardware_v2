@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(' ')
 CSRF_TRUSTED_ORIGINS = [f"http://{h}"for h in os.environ.get('ALLOWED_HOSTS').split(' ')]
@@ -74,10 +74,10 @@ WSGI_APPLICATION = 'TonysHardware_v2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
+        'NAME': 'tonys_hardware_db_local',
+        'USER': 'aveme',
+        'PASSWORD': 'nosuchpassword',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -105,11 +105,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [BASE_DIR / 'static_files']
 
-STATIC_ROOT = os.getenv('STATIC_ROOT')
+STATIC_ROOT = os.path.join('static')
 
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_REDIRECT_URL = reverse_lazy('home page')

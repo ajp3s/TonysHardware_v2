@@ -3,13 +3,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
+from django.views.generic import TemplateView, FormView
 from django.shortcuts import redirect
 from storages.backends.s3boto3 import S3Boto3Storage
+
 
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
     UploadImageForm
 from TonysHardware_v2.validators.custom_validators import ValidateAccountOwnerMixin
-from TonysHardware_v2.accounts.models import UserImageGalleryModel
+from TonysHardware_v2.accounts.models import UserImageGalleryModel, GalleryImage
 
 BasicUserModel = get_user_model()
 
@@ -28,14 +30,18 @@ class UserCreateProfileView(gen_views.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         next_url = self.request.GET.get('next', '')
+
         if next_url and '//' not in next_url:
             context['next'] = next_url
+
         return context
 
     def get_success_url(self):
         next_url = self.request.POST.get('next', '')
+
         if next_url:
             return next_url
+
         else:
             return reverse_lazy('profile_details', kwargs={'pk': self.object.pk})
 
@@ -52,6 +58,7 @@ class UserEditProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_vie
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = self.request.user
+
         return kwargs
 
     def form_valid(self, form):
@@ -61,6 +68,7 @@ class UserEditProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_vie
         if 'profile_picture' in form.changed_data:
 
             old_picture = existing_instance.profile_picture
+
             if old_picture:
                 storage.delete(old_picture.name)
 
@@ -76,17 +84,22 @@ class UserDeleteProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_v
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = self.get_object()
+
         context['message'] = 'Do you really want to delete your profile?\n This operation is irreversible.'
         context['form'] = BasicUserDeleteProfileForm(instance=obj, disabled=True)
+
         return context
 
     def post(self, request, *args, **kwargs):
         storage = S3Boto3Storage()
         self.object = self.get_object()
+        success_url = self.get_success_url()
+
         if self.object.profile_picture:
             storage.delete(self.object.profile_picture.name)
-        success_url = self.get_success_url()
+
         self.object.delete()
+
         return redirect(success_url)
 
 
@@ -121,15 +134,25 @@ class UserLogoutView(LogoutView):
 
 
 class UploadImageView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_views.CreateView):
-    model = UserImageGalleryModel
+    model = GalleryImage
     form_class = UploadImageForm
     template_name = 'accounts/upload_image.html'
 
     def get_success_url(self):
         return reverse_lazy('profile_details', kwargs={'pk': self.request.user.pk})
 
+    def get_object(self, queryset=None):
+        obj, created = UserImageGalleryModel.objects.get_or_create(user_profile=self.request.user)
+        return obj
+
     def form_valid(self, form):
-        form.instance.user_profile = self.request.user
+        storage = S3Boto3Storage
+        user_gallery = UserImageGalleryModel(user_profile=self.request.user)
+        uploaded_image = form.changed_data['ímage']
+        if user_gallery.image:
+            uploaded_image.name = uploaded_image.name
+            image = storage.save(uploaded_image.name, uploaded_image)
+            user_gallery.image = image
         return super().form_valid(form)
 
 

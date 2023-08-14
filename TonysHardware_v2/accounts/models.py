@@ -7,6 +7,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 
 class BasicUser(AbstractUser):
+
     username = models.CharField(
         unique=True,
         max_length=50,
@@ -51,6 +52,7 @@ class BasicUser(AbstractUser):
 
     def full_name(self):
         full_name = f'{self.first_name} {self.last_name}' if self.first_name or self.last_name else ""
+
         return full_name
 
     def save(self, *args, **kwargs):
@@ -63,11 +65,12 @@ class BasicUser(AbstractUser):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.username
+        return f"{self.username} / {self.full_name}"
 
 
 class UserImageGalleryModel(S3ImageSaveMixin, models.Model):
-    user_profile = models.ForeignKey(
+
+    user_profile = models.OneToOneField(
         BasicUser,
         on_delete=models.CASCADE,
     )
@@ -77,3 +80,11 @@ class UserImageGalleryModel(S3ImageSaveMixin, models.Model):
 
     )
 
+
+class GalleryImage(S3ImageSaveMixin, models.Model):
+    image = models.ImageField()
+
+    gallery = models.ForeignKey(
+        UserImageGalleryModel,
+        on_delete=models.CASCADE,
+    )

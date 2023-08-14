@@ -1,14 +1,15 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from django.forms import models
+# from django.forms import models
 
-from TonysHardware_v2.accounts.models import UserImageGalleryModel
+from TonysHardware_v2.accounts.models import GalleryImage
 
 BasicUserModel = get_user_model()
 
 
 class BasicUserRegisterForm(UserCreationForm):
+
     def __init__(self, *args, **kwargs):
         super(BasicUserRegisterForm, self).__init__(*args, **kwargs)
 
@@ -41,6 +42,7 @@ class BasicUserEditProfileForm(forms.ModelForm):
 
 
 class BasicUserDeleteProfileForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         disabled = kwargs.pop('disabled', False)
         super(BasicUserDeleteProfileForm, self).__init__(*args, **kwargs)
@@ -50,13 +52,14 @@ class BasicUserDeleteProfileForm(forms.ModelForm):
                 field.widget.attrs['disabled'] = 'disabled'
 
     class Meta:
+
         model = BasicUserModel
         fields = ['username', 'first_name', 'last_name', 'email', 'date_joined']
 
 
 class UploadImageForm(forms.ModelForm):
     class Meta:
-        model = UserImageGalleryModel
+        model = GalleryImage
         fields = [
             'image',
         ]

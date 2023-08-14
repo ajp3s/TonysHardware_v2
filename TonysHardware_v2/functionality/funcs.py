@@ -15,6 +15,7 @@ MODELS = {
 
 
 def get_model_from_model_name(model_name):
+
     return MODELS.get(model_name, None)
 
 
@@ -26,13 +27,4 @@ def create_modelform(model_input):
 
     return AbstractModelForm
 
-
-# def create_disabled_modelform(model_input):
-#     class DisabledAbstractModelForm(forms.ModelForm):
-#         class Meta:
-#             model = model_input
-#             fields = '__all__'
-#     for field in DisabledAbstractModelForm.fields.values():
-#         field.widget.attrs['disabled'] = True
-#     return DisabledAbstractModelForm
 
