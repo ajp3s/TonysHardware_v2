@@ -13,7 +13,7 @@ DDR_RAM_TYPES_CHOICES = (
 
 
 class RAMMemoryModel(S3ImageSaveMixin, models.Model):
-    MANUFACTURER_CHOICES = {
+    MANUFACTURER_CHOICES = sorted({
         ('Corsair', 'Corsair'),
         ('Kingston', 'Kingston'),
         ('Crucial', 'Crucial'),
@@ -31,7 +31,7 @@ class RAMMemoryModel(S3ImageSaveMixin, models.Model):
         ('Apacer', 'Apacer'),
         ('Smart Modular', 'Smart Modular'),
         ('Qimonda', 'Qimonda'),
-    }
+    })
 
     brand = models.CharField(
         max_length=50,

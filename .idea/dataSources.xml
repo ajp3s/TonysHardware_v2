@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="tonys_hardware_db@3.71.5.108" uuid="2ef7c574-de9f-4857-b487-23f20b0def60">
+    <data-source source="LOCAL" name="tonys_hardware_db_local@localhost" uuid="a65da7b4-f9f5-4f5c-b67f-b74ed84ed983">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://3.71.5.108:5432/tonys_hardware_db</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/tonys_hardware_db_local</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

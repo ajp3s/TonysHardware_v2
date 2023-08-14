@@ -65,26 +65,15 @@ class BasicUser(AbstractUser):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.username} / {self.full_name}"
-
-
-class UserImageGalleryModel(S3ImageSaveMixin, models.Model):
-
-    user_profile = models.OneToOneField(
-        BasicUser,
-        on_delete=models.CASCADE,
-    )
-
-    image = models.ImageField(
-        upload_to='gallery_images/',
-
-    )
+        return self.username
 
 
 class GalleryImage(S3ImageSaveMixin, models.Model):
-    image = models.ImageField()
+    image = models.ImageField(
+        upload_to='gallery/',
+    )
 
-    gallery = models.ForeignKey(
-        UserImageGalleryModel,
+    user_id = models.ForeignKey(
+        BasicUser,
         on_delete=models.CASCADE,
     )

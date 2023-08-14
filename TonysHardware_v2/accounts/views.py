@@ -11,7 +11,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from TonysHardware_v2.accounts.forms import BasicUserRegisterForm, BasicUserEditProfileForm, BasicUserDeleteProfileForm, \
     UploadImageForm
 from TonysHardware_v2.validators.custom_validators import ValidateAccountOwnerMixin
-from TonysHardware_v2.accounts.models import UserImageGalleryModel, GalleryImage
+from TonysHardware_v2.accounts.models import GalleryImage
 
 BasicUserModel = get_user_model()
 
@@ -37,6 +37,7 @@ class UserCreateProfileView(gen_views.CreateView):
         return context
 
     def get_success_url(self):
+
         next_url = self.request.POST.get('next', '')
 
         if next_url:
@@ -92,6 +93,7 @@ class UserDeleteProfileView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_v
 
     def post(self, request, *args, **kwargs):
         storage = S3Boto3Storage()
+
         self.object = self.get_object()
         success_url = self.get_success_url()
 
@@ -110,9 +112,14 @@ class UserProfileDetailsView(LoginRequiredMixin, gen_views.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        gallery = UserImageGalleryModel.objects.filter(user_profile_id=self.request.user.pk)
+        gallery = GalleryImage.objects.filter(user_id=self.object.pk)
+
         context['gallery'] = gallery
-        context['is_owner'] = self.request.user.is_authenticated and self.request.user.username == self.get_object().username
+        context['is_owner'] = (
+                self.request.user.is_authenticated and
+                self.request.user.username == self.get_object().username
+        )
+
         return context
 
 
@@ -122,10 +129,12 @@ class UserLoginView(LoginView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['next'] = self.request.POST.get('next', '')
+
         return context
 
     def get_success_url(self):
         pk = self.request.user.pk
+
         return self.request.POST.get('next', reverse_lazy('profile_details', kwargs={'pk': pk}))
 
 
@@ -133,27 +142,18 @@ class UserLogoutView(LogoutView):
     success_url = reverse_lazy('home page')
 
 
-class UploadImageView(LoginRequiredMixin, ValidateAccountOwnerMixin, gen_views.CreateView):
+class UploadImageView(LoginRequiredMixin, gen_views.CreateView):
     model = GalleryImage
     form_class = UploadImageForm
     template_name = 'accounts/upload_image.html'
 
-    def get_success_url(self):
-        return reverse_lazy('profile_details', kwargs={'pk': self.request.user.pk})
-
-    def get_object(self, queryset=None):
-        obj, created = UserImageGalleryModel.objects.get_or_create(user_profile=self.request.user)
-        return obj
-
     def form_valid(self, form):
-        storage = S3Boto3Storage
-        user_gallery = UserImageGalleryModel(user_profile=self.request.user)
-        uploaded_image = form.changed_data['ímage']
-        if user_gallery.image:
-            uploaded_image.name = uploaded_image.name
-            image = storage.save(uploaded_image.name, uploaded_image)
-            user_gallery.image = image
+        form.instance.user_id = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+
+        return reverse_lazy('profile_details', kwargs={'pk': self.request.user.pk})
 
 
 class UsersListView(LoginRequiredMixin, gen_views.ListView):
