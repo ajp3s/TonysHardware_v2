@@ -3,7 +3,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views import generic as gen_views
-from django.views.generic import TemplateView, FormView
 from django.shortcuts import redirect
 from storages.backends.s3boto3 import S3Boto3Storage
 
